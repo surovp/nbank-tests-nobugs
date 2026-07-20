@@ -26,9 +26,23 @@ class ResponseSpecs:
         return check
 
     @staticmethod
-    def request_returns_bad_request(error_key: str, error_value: str) -> Callable:
+    def request_returns_bad_request(error_value: str, error_key: str | None = None) -> Callable:
         def check(response: Response):
             assert response.status_code == HTTPStatus.BAD_REQUEST, response.text
-            assert error_value in response.json().get(error_key)
+            if error_key:
+                assert error_value in response.json().get(error_key)
+            else:
+                assert error_value in response.text.strip()
+
+        return check
+
+    @staticmethod
+    def request_returns_forbidden(error_value: str, error_key: str | None = None) -> Callable:
+        def check(response: Response):
+            assert response.status_code == HTTPStatus.FORBIDDEN, response.text
+            if error_key:
+                assert error_value in response.json().get(error_key)
+            else:
+                assert error_value in response.text.strip()
 
         return check

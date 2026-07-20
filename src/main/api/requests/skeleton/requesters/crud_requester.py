@@ -21,9 +21,17 @@ class CrudRequester(HttpRequest, CrudEndpointInterface):
             json=body,
         )
         self.response_spec(response)
+        return response
 
+    def put(self, model: Optional[T] = None) -> requests.Response:
+        body = model.model_dump() if model is not None else ''
 
-
+        response = requests.put(
+            url=f'{Config.get('server')}{Config.get("api_version")}{self.endpoint.value.url}',
+            headers=self.request_spec,
+            json=body,
+        )
+        self.response_spec(response)
         return response
 
     def get(self, id: int): ...

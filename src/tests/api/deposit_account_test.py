@@ -1,0 +1,72 @@
+from http import HTTPStatus
+
+import pytest
+from src.main.api.classes.api_manager import ApiManager
+from src.main.api.fixtures.user_fixtures import user_request
+from src.main.api.generators.random_data import RandomData
+from src.main.api.models.create_account_response import CreateAccountResponse
+from src.main.api.models.create_user_request import CreateUserRequest
+from src.main.api.models.deposit_money_request import DepositMoneyRequest
+
+
+@pytest.mark.api
+class TestDepositAccount:
+
+    @pytest.mark.usefixtures("api_manager", 'user_request')
+    @pytest.mark.parametrize(
+        argnames='balance',
+        argvalues=[RandomData.get_deposit_amount(), 5000.00, 5000, 4999.99]
+    )
+    def test_deposit_account(self, user_request: CreateUserRequest, api_manager: ApiManager, balance):
+        account = api_manager.user_steps.create_account(user_request)
+        api_manager.deposit_steps.deposit(user_request, DepositMoneyRequest(id=account.id, balance=balance))
+
+
+    @pytest.mark.usefixtures("api_manager", 'user_request')
+    @pytest.mark.parametrize(
+        argnames='balance, error_value',
+        argvalues=[
+            (0, 'Deposit amount must be at least 0.01'),
+            (RandomData.negative_number(), 'Deposit amount must be at least 0.01'),
+            (5000.01, 'Deposit amount cannot exceed 5000'),
+            (RandomData.get_invalid_deposit_amount(), 'Deposit amount cannot exceed 5000'),
+        ]
+    )
+    def test_invalid_balance_account(
+            self,
+            user_request: CreateUserRequest,
+            api_manager: ApiManager,
+            balance,
+            error_value
+    ):
+        account = api_manager.user_steps.create_account(user_request)
+        api_manager.deposit_steps.invalid_deposit(
+            user_request,
+            DepositMoneyRequest(id=account.id, balance=balance),
+            error_value
+        )
+
+    @pytest.mark.usefixtures("api_manager", 'user_request', 'user_with_account')
+    def test_invalid_id_account(
+            self,
+            user_request: CreateUserRequest,
+            api_manager: ApiManager,
+            user_with_account: CreateAccountResponse
+    ):
+        api_manager.user_steps.create_account(user_request)
+        api_manager.deposit_steps.invalid_deposit(
+            user_request,
+            DepositMoneyRequest(id=user_with_account.id, balance=RandomData.get_deposit_amount()),
+            'Unauthorized access to account',
+            HTTPStatus.FORBIDDEN
+        )
+
+    @pytest.mark.usefixtures("api_manager", 'user_request')
+    def test_not_found_account(self, api_manager: ApiManager, user_request: CreateUserRequest):
+        api_manager.user_steps.create_account(user_request)
+        api_manager.deposit_steps.invalid_deposit(
+            user_request,
+            DepositMoneyRequest(id=RandomData.get_invalid_account_id(), balance=RandomData.get_deposit_amount()),
+            'Unauthorized access to account',
+            HTTPStatus.FORBIDDEN
+        )
