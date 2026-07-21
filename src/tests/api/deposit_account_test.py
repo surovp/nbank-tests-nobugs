@@ -7,6 +7,7 @@ from src.main.api.generators.random_data import RandomData
 from src.main.api.models.create_account_response import CreateAccountResponse
 from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.api.models.deposit_money_request import DepositMoneyRequest
+from src.main.api.specs.response_specs import DepositErrors
 
 
 @pytest.mark.api
@@ -26,10 +27,10 @@ class TestDepositAccount:
     @pytest.mark.parametrize(
         argnames='balance, error_value',
         argvalues=[
-            (0, 'Deposit amount must be at least 0.01'),
-            (RandomData.negative_number(), 'Deposit amount must be at least 0.01'),
-            (5000.01, 'Deposit amount cannot exceed 5000'),
-            (RandomData.get_invalid_deposit_amount(), 'Deposit amount cannot exceed 5000'),
+            (0, DepositErrors.MIN_DEPOSIT_AMOUNT.value),
+            (RandomData.negative_number(), DepositErrors.MIN_DEPOSIT_AMOUNT.value),
+            (5000.01, DepositErrors.MAX_DEPOSIT_AMOUNT.value),
+            (RandomData.get_invalid_deposit_amount(), DepositErrors.MAX_DEPOSIT_AMOUNT.value),
         ]
     )
     def test_invalid_balance_account(
@@ -57,7 +58,7 @@ class TestDepositAccount:
         api_manager.deposit_steps.invalid_deposit(
             user_request,
             DepositMoneyRequest(id=user_with_account.id, balance=RandomData.get_deposit_amount()),
-            'Unauthorized access to account',
+            DepositErrors.UNAUTHORIZED_ACCOUNT.value,
             HTTPStatus.FORBIDDEN
         )
 
@@ -67,6 +68,6 @@ class TestDepositAccount:
         api_manager.deposit_steps.invalid_deposit(
             user_request,
             DepositMoneyRequest(id=RandomData.get_invalid_account_id(), balance=RandomData.get_deposit_amount()),
-            'Unauthorized access to account',
+            DepositErrors.UNAUTHORIZED_ACCOUNT.value,
             HTTPStatus.FORBIDDEN
         )

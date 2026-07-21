@@ -1,6 +1,7 @@
 from typing import Callable
 from http import HTTPStatus
 from requests import Response
+from enum import Enum
 
 
 class ResponseSpecs:
@@ -46,3 +47,20 @@ class ResponseSpecs:
                 assert error_value in response.text.strip()
 
         return check
+
+
+
+class DepositErrors(str, Enum):
+    UNAUTHORIZED_ACCOUNT = 'Unauthorized access to account'
+    MIN_DEPOSIT_AMOUNT = 'Deposit amount must be at least 0.01'
+    MAX_DEPOSIT_AMOUNT = 'Deposit amount cannot exceed 5000'
+
+class TransferErrors(str, Enum):
+    INVALID_TRANSFER = 'Invalid transfer: insufficient funds or invalid accounts'
+    MIN_TRANSFER_AMOUNT = 'Transfer amount must be at least 0.01'
+    MAX_TRANSFER_AMOUNT = 'Transfer amount cannot exceed 10000'
+
+class CustomerErrors(str, Enum):
+    INVALID_CUSTOMER_NAME = 'Name must contain two words with letters only'
+
+

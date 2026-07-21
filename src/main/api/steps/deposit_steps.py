@@ -1,5 +1,7 @@
 import math
+from typing import List
 
+from src.main.api.models.account_response import AccountsListResponse
 from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.api.models.deposit_money_request import DepositMoneyRequest
 from src.main.api.models.deposit_money_response import DepositMoneyResponse
@@ -9,6 +11,7 @@ from src.main.api.requests.skeleton.requesters.validated_crud_requester import V
 from src.main.api.specs.request_specs import RequestSpecs
 from src.main.api.specs.response_specs import ResponseSpecs
 from src.main.api.steps.base_step import BaseSteps
+from src.main.api.utils.helpers import max_deposit_value, get_balance_account
 
 
 class DepositSteps(BaseSteps):
@@ -20,15 +23,22 @@ class DepositSteps(BaseSteps):
             ResponseSpecs.request_returns_ok()
         ).post(deposit_request)
 
+        balances_response: List[AccountsListResponse] = ValidatedCrudRequester(
+            RequestSpecs.auth_as_user(user_request.username, user_request.password),
+            Endpoint.ACCOUNTS,
+            ResponseSpecs.request_returns_ok()
+        ).get(as_list=True)
+
         assert deposit_response.balance == deposit_request.balance
+        assert get_balance_account(balances_response, deposit_request.id) == deposit_request.balance
         assert deposit_response.transactions
 
         return deposit_response
 
-    def deposit_more_5000(self, user_request: CreateUserRequest, account_id: int, sum_iter:int | float):
-        iterations = math.ceil(sum_iter / 5000)
+    def deposit_any_amount(self, user_request: CreateUserRequest, account_id: int, sum_iter: int | float):
+        iterations = math.ceil(sum_iter / max_deposit_value())
 
-        deposit_request = DepositMoneyRequest(id=account_id, balance=5000)
+        deposit_request = DepositMoneyRequest(id=account_id, balance=max_deposit_value())
 
         for _ in range(iterations):
             deposit_response: DepositMoneyResponse = ValidatedCrudRequester(
@@ -64,3 +74,10 @@ class DepositSteps(BaseSteps):
             spec_factories[expected_status](error_value, error_key)
         ).post(deposit_request)
 
+        balances_response: List[AccountsListResponse] = ValidatedCrudRequester(
+            RequestSpecs.auth_as_user(user_request.username, user_request.password),
+            Endpoint.ACCOUNTS,
+            ResponseSpecs.request_returns_ok()
+        ).get(as_list=True)
+
+        assert get_balance_account(balances_response, deposit_request.id) == 0

@@ -2,6 +2,7 @@ import pytest
 from src.main.api.classes.api_manager import ApiManager
 from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.api.models.customer_profile_request import CustomerProfileRequest
+from src.main.api.specs.response_specs import CustomerErrors
 
 
 @pytest.mark.api
@@ -44,5 +45,5 @@ class TestCustomerProfile:
     def test_customer_invalid_name(self, user_request: CreateUserRequest, api_manager: ApiManager, name):
         api_manager.user_steps.create_account(user_request)
         api_manager.customer_steps.update_invalid_customer_name(
-            user_request, CustomerProfileRequest(name=name), 'Name must contain two words with letters only'
+            user_request, CustomerProfileRequest(name=name), CustomerErrors.INVALID_CUSTOMER_NAME.value
         )

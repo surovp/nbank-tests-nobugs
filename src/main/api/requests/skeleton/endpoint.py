@@ -7,9 +7,11 @@ from src.main.api.models.create_account_response import CreateAccountResponse
 from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.api.models.create_user_response import CreateUserResponse
 from src.main.api.models.customer_profile_request import CustomerProfileRequest
-from src.main.api.models.customer_profile_response import CustomerProfileResponse
 from src.main.api.models.deposit_money_request import DepositMoneyRequest
 from src.main.api.models.deposit_money_response import DepositMoneyResponse
+from src.main.api.models.customer_profile_response import CustomerProfileResponse
+from src.main.api.models.account_response import AccountsListResponse
+from src.main.api.models.get_customer_profile import GetCustomerProfile
 from src.main.api.models.login_user_request import LoginUserRequest
 from src.main.api.models.login_user_response import LoginUserResponse
 from src.main.api.models.transfer_money_request import TransferMoneyRequest
@@ -59,9 +61,21 @@ class Endpoint(Enum):
         response_model=DepositMoneyResponse
     )
 
-    CUSTOMER_NAME = EndpointConfig(
+    EDIT_CUSTOMER_NAME = EndpointConfig(
         url='/customer/profile',
         request_model=CustomerProfileRequest,
         response_model=CustomerProfileResponse
+    )
+
+    CUSTOMER_PROFILE = EndpointConfig(
+        url='/customer/profile',
+        request_model=None,
+        response_model=GetCustomerProfile
+    )
+
+    ACCOUNTS = EndpointConfig(
+        url='/customer/accounts',
+        request_model=None,
+        response_model=AccountsListResponse
     )
 
