@@ -14,3 +14,10 @@ def user_request(api_manager: ApiManager):
 @pytest.fixture
 def admin_user_request():
     return CreateUserRequest(username='admin', password='admin', role='ADMIN')
+
+@pytest.fixture
+def user_with_account(api_manager: ApiManager):
+    user_data: CreateUserRequest = RandomModelGenerator.generate(CreateUserRequest)
+    api_manager.admin_steps.create_user(user_data)
+    account = api_manager.user_steps.create_account(user_data)
+    return account

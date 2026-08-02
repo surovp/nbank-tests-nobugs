@@ -1,4 +1,4 @@
-from typing import TypeVar, Optional
+from typing import TypeVar, Optional, List
 
 from pydantic import TypeAdapter
 
@@ -16,13 +16,20 @@ class ValidatedCrudRequester(HttpRequest):
             endpoint,
             response_spec)
         self._adapter = TypeAdapter(self.endpoint.value.response_model)
+        self._list_adapter = TypeAdapter(List[self.endpoint.value.response_model])
 
     def post(self, model: Optional[T] = None):
         response = self.crud_requester.post(model)
         return self._adapter.validate_python(response.json())
 
-    def get(self, id: Optional[int] = None):
+    def get(self, id: Optional[int] = None, as_list: bool = False):
         response = self.crud_requester.get(id)
+        if as_list:
+            return self._list_adapter.validate_python(response.json())
+        return self._adapter.validate_python(response.json())
+
+    def put(self, model: Optional[T] = None):
+        response = self.crud_requester.put(model)
         return self._adapter.validate_python(response.json())
 
     def update(self, id: int): ...

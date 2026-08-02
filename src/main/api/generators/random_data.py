@@ -18,3 +18,23 @@ class RandomData:
         password = upper + lower + digits + special
         random.shuffle(password)
         return ''.join(password)
+
+    @staticmethod
+    def get_deposit_amount() -> float:
+        return faker.pyfloat(min_value=0.01, max_value=5000.00, right_digits=2)
+
+    @staticmethod
+    def get_invalid_deposit_amount() -> float:
+        return faker.pyfloat(min_value=5000.01, max_value=100000.00, right_digits=2)
+
+    @staticmethod
+    def negative_number() -> float:
+        return faker.pyfloat(min_value=-5000.00, max_value=-0.01, right_digits=2)
+
+    @staticmethod
+    def get_invalid_account_id() -> int:
+        invalid_id = [
+            lambda: faker.random_int(-100, -1),
+            lambda: faker.random_int(100000, 999999)
+        ]
+        return random.choice(invalid_id)()
