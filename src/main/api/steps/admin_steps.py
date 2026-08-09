@@ -1,3 +1,5 @@
+from typing import List
+
 from src.main.api.generators.random_model_generator import RandomModelGenerator
 from src.main.api.models.comparison.model_assertions import ModelAssertions
 from src.main.api.models.create_user_request import CreateUserRequest
@@ -36,6 +38,14 @@ class AdminSteps(BaseSteps):
             Endpoint.ADMIN_CREATE_USER,
             ResponseSpecs.request_returns_bad_request(error_key, error_value)
         ).post(create_user_request)
+
+    def get_all_users(self) -> List[CreateUserRequest]:
+        response = ValidatedCrudRequester(
+            RequestSpecs.admin_auth_spec(),
+            Endpoint.ADMIN_GET_ALL_USERS,
+            ResponseSpecs.request_returns_ok()
+        ).get()
+        return response
 
 
 

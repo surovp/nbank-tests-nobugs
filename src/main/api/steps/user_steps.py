@@ -1,3 +1,5 @@
+from typing import List
+
 from src.main.api.models.comparison.model_assertions import ModelAssertions
 from src.main.api.models.create_account_response import CreateAccountResponse
 from src.main.api.models.create_user_request import CreateUserRequest
@@ -32,3 +34,12 @@ class UserSteps(BaseSteps):
         assert create_account_response.balance == 0.0
         assert not create_account_response.transactions
         return create_account_response
+
+    def get_all_accounts(self, user_request: CreateUserRequest):
+        user_accounts: List[CreateAccountResponse] = ValidatedCrudRequester(
+            RequestSpecs.auth_as_user(user_request.username, user_request.password),
+            Endpoint.GET_CUSTOMER_ACCOUNTS,
+            ResponseSpecs.request_returns_ok()
+        ).get()
+
+        return user_accounts

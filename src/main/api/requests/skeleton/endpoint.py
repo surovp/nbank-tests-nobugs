@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import List
 
 from src.main.api.models.base_model import BaseModel
 from dataclasses import dataclass
@@ -79,3 +80,14 @@ class Endpoint(Enum):
         response_model=AccountsListResponse
     )
 
+    ADMIN_GET_ALL_USERS = EndpointConfig(
+        url='/admin/users',
+        request_model=None,
+        response_model=List[CreateUserRequest]
+    )
+
+    GET_CUSTOMER_ACCOUNTS = EndpointConfig(
+        url='/customer/accounts',
+        request_model=None,
+        response_model=List[CreateAccountResponse]
+    )
