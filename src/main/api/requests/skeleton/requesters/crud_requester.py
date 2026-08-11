@@ -1,5 +1,4 @@
-from http import HTTPStatus
-from typing import TypeVar, Optional, Union
+from typing import TypeVar, Optional
 
 import requests
 
@@ -12,7 +11,6 @@ from src.main.api.requests.skeleton.interfaces.crud_end_interface import CrudEnd
 T = TypeVar('T', bound=BaseModel)
 
 class CrudRequester(HttpRequest, CrudEndpointInterface):
-
     @property
     def base_url(self) -> str:
         return f"{Config.get('server')}{Config.get('api_version')}"
