@@ -1,4 +1,6 @@
 import random
+import string
+
 from faker import Faker
 
 faker = Faker()
@@ -38,3 +40,7 @@ class RandomData:
             lambda: faker.random_int(100000, 999999)
         ]
         return random.choice(invalid_id)()
+
+    @staticmethod
+    def get_profile_username(length=random.randint(3, 15)) -> str:
+        return f"{''.join(faker.random_letters(length))} {''.join(faker.random_letters(length))}"

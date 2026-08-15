@@ -17,6 +17,7 @@ class ValidatedCrudRequester(HttpRequest):
             response_spec=response_spec
         )
         self._adapter = TypeAdapter(self.endpoint.value.response_model)
+        self._list_adapter = TypeAdapter(List[self.endpoint.value.response_model])
 
     def post(self, model: Optional[T] = None):
         response = self.crud_requester.post(model)
