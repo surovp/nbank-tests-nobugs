@@ -41,7 +41,3 @@ class TestDepositAccount:
         expect(deposit.deposit_text).to_be_visible()
         user_deposit = deposit.deposit_money(account=user_account.id)
         user_deposit.check_alert_message_and_accept(BankAlert.PLEASE_ENTER_VALID_AMOUNT)
-
-
-
-
