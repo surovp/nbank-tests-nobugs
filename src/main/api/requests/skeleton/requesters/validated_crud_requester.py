@@ -12,9 +12,10 @@ class ValidatedCrudRequester(HttpRequest):
     def __init__(self, request_spec, endpoint, response_spec):
         super().__init__(request_spec, endpoint, response_spec)
         self.crud_requester = CrudRequester(
-            request_spec,
-            endpoint,
-            response_spec)
+            request_spec=request_spec,
+            endpoint=endpoint,
+            response_spec=response_spec
+        )
         self._adapter = TypeAdapter(self.endpoint.value.response_model)
         self._list_adapter = TypeAdapter(List[self.endpoint.value.response_model])
 

@@ -4,6 +4,7 @@ import logging
 import pytest
 
 from src.main.api.classes.api_manager import ApiManager
+from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.api.models.create_user_response import CreateUserResponse
 
 
@@ -19,7 +20,15 @@ def created_objects():
 def cleanup_objects(objects: List[Any]):
     api_manager = ApiManager(objects)
     for obj in objects:
-        if isinstance(obj, CreateUserResponse):
-            api_manager.admin_steps.delete_user(obj.id)
-        else:
+        try:
+            if isinstance(obj, CreateUserResponse):
+                api_manager.admin_steps.delete_user(obj.id)
+            elif isinstance(obj, CreateUserRequest):
+                try:
+                    profile = api_manager.user_steps.get_profile(obj)
+                except Exception as e:
+                    logging.warning(f'Skip cleanup for user "{getattr(obj, "username", obj)}": {e}')
+                    continue
+                api_manager.admin_steps.delete_user(profile.id)
+        except:
             logging.warning(f"Object {type(obj)} has not been deleted")

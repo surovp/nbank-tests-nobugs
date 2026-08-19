@@ -36,7 +36,7 @@ class RequestSpecs:
                 ResponseSpecs.request_returns_ok()
             ).post(LoginUserRequest(username=username, password=password))
         except:
-            logging.error(f"Authentication failed for {username} with status {response.status_code}")
+            logging.error(f"Authentication failed for {username}")
             raise Exception("Failed to authenticate user")
         else:
             auth_header = response.headers.get("Authorization")

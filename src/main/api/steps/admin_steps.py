@@ -1,6 +1,5 @@
 from typing import List
 
-from src.main.api.generators.random_model_generator import RandomModelGenerator
 from src.main.api.models.comparison.model_assertions import ModelAssertions
 from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.api.models.create_user_response import CreateUserResponse

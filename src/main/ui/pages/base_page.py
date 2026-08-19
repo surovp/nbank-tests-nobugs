@@ -1,10 +1,12 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from typing import TypeVar, Type
+from typing import TypeVar, Type, Callable, List
 
-from playwright.sync_api import Page, Dialog
+from playwright.sync_api import Page, Dialog, Locator
 
 from src.main.api.configs.config import Config
+from src.main.api.models.create_user_request import CreateUserRequest
+from src.main.api.specs.request_specs import RequestSpecs
 
 T = TypeVar('T', bound="BasePage")
 
@@ -25,6 +27,13 @@ class BasePage(ABC):
     def username_password(self):
         return self.page.get_by_placeholder("Password")
 
+    @property
+    def profile_page_button(self):
+        return self.page.locator(".user-name")
+
+    def select_account(self):
+        return self.page.locator('.account-selector')
+
     def open(self: T) -> T:
         target = self.url()
         if self.base_url and target.startswith('/'):
@@ -36,10 +45,22 @@ class BasePage(ABC):
         return page_cls(self.page)
 
     def check_alert_message_and_accept(self: T, expected_text: str) -> T:
-        def _handler(d: Dialog):
+        def _handler(d: Dialog) -> None:
             assert expected_text in d.message, f"Alert text missmatch: {d.message}"
             d.accept()
 
         self.page.once('dialog', _handler)
         return self
 
+    def auth_as_user(self: T, user_request: CreateUserRequest) -> None:
+        auth_token = RequestSpecs.auth_as_user(user_request.username, user_request.password).get("Authorization")
+        self.page.set_viewport_size({"width": 1920, "height": 1080})
+        self.page.goto(self.base_url)
+        self.page.evaluate('token => localStorage.setItem("authToken", token)', auth_token)
+
+    def _generate_page_elements(self, elements: Locator, constructor: Callable[[Locator], T]) -> List[T]:
+        count = elements.count()
+        if count == 0:
+            return []
+        elements.first.wait_for(state="attached", timeout=10_000)
+        return [constructor(elements.nth(i)) for i in range(elements.count())]
