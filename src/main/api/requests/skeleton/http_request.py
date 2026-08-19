@@ -1,9 +1,9 @@
-from typing import Protocol, Dict, Callable
+from typing import Dict, Callable
 
 from src.main.api.requests.skeleton.endpoint import Endpoint
 
 
-class HttpRequest(Protocol):
+class HttpRequest:
     def __init__(
             self,
             request_spec: Dict[str, str],

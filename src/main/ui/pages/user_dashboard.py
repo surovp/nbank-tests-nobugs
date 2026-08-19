@@ -8,6 +8,14 @@ class UserDashboard(BasePage):
         return self.page.get_by_text("User Dashboard")
 
     @property
+    def deposit_money_button(self):
+        return self.page.get_by_role("button", name="💰 Deposit Money")
+
+    @property
+    def make_a_transfer_button(self):
+        return self.page.get_by_role("button", name="🔄 Make a Transfer")
+
+    @property
     def create_account_button(self):
         return self.page.get_by_role("button", name="➕ Create New Account")
 

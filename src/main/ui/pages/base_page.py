@@ -27,6 +27,13 @@ class BasePage(ABC):
     def username_password(self):
         return self.page.get_by_placeholder("Password")
 
+    @property
+    def profile_page_button(self):
+        return self.page.locator(".user-name")
+
+    def select_account(self):
+        return self.page.locator('.account-selector')
+
     def open(self: T) -> T:
         target = self.url()
         if self.base_url and target.startswith('/'):
@@ -38,7 +45,7 @@ class BasePage(ABC):
         return page_cls(self.page)
 
     def check_alert_message_and_accept(self: T, expected_text: str) -> T:
-        def _handler(d: Dialog):
+        def _handler(d: Dialog) -> None:
             assert expected_text in d.message, f"Alert text missmatch: {d.message}"
             d.accept()
 
