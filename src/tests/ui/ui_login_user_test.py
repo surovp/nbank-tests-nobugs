@@ -6,7 +6,6 @@ from src.main.ui.pages.login_page import LoginPage
 from src.main.ui.pages.user_dashboard import UserDashboard
 
 @pytest.mark.ui
-@pytest.mark.browsers('webkit')
 class TestLoginUser:
     def test_admin_can_login_with_correct_data(self, page: Page, admin_user_request: CreateUserRequest):
         admin_page = LoginPage(page).open() \

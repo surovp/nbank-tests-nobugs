@@ -35,7 +35,7 @@ class AdminSteps(BaseSteps):
         CrudRequester(
             RequestSpecs.admin_auth_spec(),
             Endpoint.ADMIN_CREATE_USER,
-            ResponseSpecs.request_returns_bad_request(error_key, error_value)
+            ResponseSpecs.request_returns_bad_request(error_value, error_key)
         ).post(create_user_request)
 
     def get_all_users(self) -> List[CreateUserRequest]:

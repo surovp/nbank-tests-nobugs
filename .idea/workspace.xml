@@ -4,10 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="be78f9fa-e103-4d93-baf7-187b8cde681d" name="Changes" comment="Домашнее задание по UI тестам&#10;Добавлены:&#10;*Новые алерты&#10;*Страницы Ред профиля, Пополнения, Перевода&#10;*Тесты">
+    <list default="true" id="be78f9fa-e103-4d93-baf7-187b8cde681d" name="Changes" comment="delete lines">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/api/requests/skeleton/http_request.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/api/requests/skeleton/http_request.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/api/requests/skeleton/requesters/crud_requester.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/api/requests/skeleton/requesters/crud_requester.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/infra/docker-compose/docker-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/docker-compose/docker-compose.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/api/specs/response_specs.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/api/specs/response_specs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/api/steps/admin_steps.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/api/steps/admin_steps.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/api/utils/helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/api/utils/helpers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/ui/ui_customer_profile_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/ui/ui_customer_profile_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/ui/ui_deposit_account_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/ui/ui_deposit_account_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/ui/ui_login_user_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/ui/ui_login_user_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/ui/ui_transfer_money_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/ui/ui_transfer_money_test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,7 +31,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="senior-ui-tests" />
+        <entry key="$PROJECT_DIR$" value="second_iteration_ui" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -68,6 +74,7 @@
     &quot;Python tests.Python tests for src.tests.api.create_user_test.TestCreateUser.test_create_invalid_user.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests for src.tests.api.create_user_test.TestCreateUser.test_create_valid_user.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests for src.tests.api.customer_profile_test.TestCustomerProfile.test_customer_name.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for src.tests.api.deposit_account_test.TestDepositAccount.test_invalid_balance_account.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests for src.tests.api.login_user_test.TestLoginUser.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests for src.tests.api.login_user_test.TestLoginUser.test_login_admin_user.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests for src.tests.api.login_user_test.TestLoginUser.test_login_user.executor&quot;: &quot;Run&quot;,
@@ -104,7 +111,7 @@
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
     &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;#3 on second__iteration__ui&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/Pavel/PycharmProjects/nbank-tests&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -121,8 +128,8 @@
       <recent name="C:\Users\Pavel\PycharmProjects\nbank-tests\src" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests for src.tests.ui.ui_transfer_money_test.TestTransferMoney.test_transfer_page_invalid_account">
-    <configuration name="Python tests for src.tests.ui.ui_transfer_money_test.TestTransferMoney.test_transfer_money_empty_fields" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python tests.Python tests for src.tests.ui.ui_customer_profile_test.TestEditProfile.test_edit_profile">
+    <configuration name="Python tests for src.tests.api.create_user_test.TestCreateUser.test_create_invalid_user" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="nbank-tests" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -133,11 +140,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;src.tests.ui.ui_transfer_money_test.TestTransferMoney.test_transfer_money_empty_fields&quot;" />
+      <option name="_new_target" value="&quot;src.tests.api.create_user_test.TestCreateUser.test_create_invalid_user&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for src.tests.ui.ui_transfer_money_test.TestTransferMoney.test_transfer_page_invalid_account" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for src.tests.api.deposit_account_test.TestDepositAccount.test_invalid_balance_account" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="nbank-tests" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -148,7 +155,22 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;src.tests.ui.ui_transfer_money_test.TestTransferMoney.test_transfer_page_invalid_account&quot;" />
+      <option name="_new_target" value="&quot;src.tests.api.deposit_account_test.TestDepositAccount.test_invalid_balance_account&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for src.tests.ui.ui_customer_profile_test.TestEditProfile.test_edit_profile" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="nbank-tests" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;src.tests.ui.ui_customer_profile_test.TestEditProfile.test_edit_profile&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -182,28 +204,13 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for src.tests.ui.ui_transfer_money_test.TestTransferMoney.test_user_can_transfer_money_any" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="nbank-tests" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;src.tests.ui.ui_transfer_money_test.TestTransferMoney.test_user_can_transfer_money_any&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.Python tests for src.tests.ui.ui_transfer_money_test.TestTransferMoney.test_transfer_page_invalid_account" />
-        <item itemvalue="Python tests.Python tests for src.tests.ui.ui_transfer_money_test.TestTransferMoney.test_transfer_page_invalid_transfer" />
-        <item itemvalue="Python tests.Python tests for src.tests.ui.ui_transfer_money_test.TestTransferMoney.test_transfer_money_empty_fields" />
+        <item itemvalue="Python tests.Python tests for src.tests.ui.ui_customer_profile_test.TestEditProfile.test_edit_profile" />
+        <item itemvalue="Python tests.Python tests for src.tests.api.deposit_account_test.TestDepositAccount.test_invalid_balance_account" />
+        <item itemvalue="Python tests.Python tests for src.tests.api.create_user_test.TestCreateUser.test_create_invalid_user" />
         <item itemvalue="Python tests.Python tests for src.tests.ui.ui_transfer_money_test.TestTransferMoney.test_transfer_user_when_edit_name" />
-        <item itemvalue="Python tests.Python tests for src.tests.ui.ui_transfer_money_test.TestTransferMoney.test_user_can_transfer_money_any" />
+        <item itemvalue="Python tests.Python tests for src.tests.ui.ui_transfer_money_test.TestTransferMoney.test_transfer_page_invalid_transfer" />
       </list>
     </recent_temporary>
   </component>

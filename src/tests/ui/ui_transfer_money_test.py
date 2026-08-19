@@ -15,7 +15,6 @@ from src.main.ui.pages.transfer_page import TransferMoney
 @pytest.mark.ui
 class TestTransferMoney:
     @pytest.mark.user_session(1)
-    @pytest.mark.browsers('chromium')
     def test_user_can_transfer_money_self(self, page: Page, user_request: CreateUserRequest, api_manager: ApiManager):
         acc1 = api_manager.user_steps.create_account(user_request)
         acc2 = api_manager.user_steps.create_account(user_request)
@@ -36,7 +35,6 @@ class TestTransferMoney:
         assert get_balance_account(balance_account, acc2.id) == amount
 
     @pytest.mark.user_session(2)
-    @pytest.mark.browsers('chromium')
     def test_user_can_transfer_money_any(
             self,
             page: Page,
@@ -64,7 +62,6 @@ class TestTransferMoney:
         assert get_balance_account(balance_account, user_account_2.id) == amount
 
     @pytest.mark.user_session(2)
-    @pytest.mark.browsers('chromium')
     def test_transfer_user_when_edit_name(
             self,
             page: Page,
@@ -91,7 +88,6 @@ class TestTransferMoney:
         assert get_balance_account(balance_account, user_account_2.id) == 0
 
     @pytest.mark.user_session(1)
-    @pytest.mark.browsers('chromium')
     def test_transfer_page_empty_fields(self, page: Page, user_request: CreateUserRequest, api_manager: ApiManager):
         transfer_money = TransferMoney(page).open()
         expect(transfer_money.transfer_text).to_be_visible()
@@ -99,7 +95,6 @@ class TestTransferMoney:
         transfer_money.check_alert_message_and_accept(BankAlert.PLEASE_FILL_FIELDS)
 
     @pytest.mark.user_session(1)
-    @pytest.mark.browsers('chromium')
     def test_transfer_page_invalid_amount(self, page: Page, user_request: CreateUserRequest, api_manager: ApiManager):
         acc1 = api_manager.user_steps.create_account(user_request)
         acc2 = api_manager.user_steps.create_account(user_request)
@@ -120,7 +115,6 @@ class TestTransferMoney:
         assert get_balance_account(balance_account, acc2.id) == 0
 
     @pytest.mark.user_session(1)
-    @pytest.mark.browsers('chromium')
     def test_transfer_page_invalid_account(self, page: Page, user_request: CreateUserRequest, api_manager: ApiManager):
         acc1 = api_manager.user_steps.create_account(user_request)
         amount = RandomData.get_deposit_amount()
