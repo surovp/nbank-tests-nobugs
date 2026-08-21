@@ -10,13 +10,13 @@ from src.main.ui.pages.user_dashboard import UserDashboard
 @pytest.mark.ui
 class TestCreateAccount:
     @pytest.mark.user_session(1)
+    @pytest.mark.check_accounts_change(delta=1)
     def test_user_can_create_account(self, page: Page, user_request: CreateUserRequest, api_manager: ApiManager):
-        user_dashboard = UserDashboard(page).open()
-        expect(user_dashboard.welcome_text).to_be_visible()
+        UserDashboard(page).open() \
+            .check_page_is_visible() \
+            .create_new_account() \
+            .check_alert_message_and_accept(BankAlert.NEW_ACCOUNT_CREATED)
 
-        user_dashboard = user_dashboard.create_new_account()
-        user_dashboard.check_alert_message_and_accept(BankAlert.NEW_ACCOUNT_CREATED)
-        user_accounts = api_manager.user_steps.get_all_accounts(user_request)
-
-        assert len(user_accounts) == 1
-        assert user_accounts[0] and user_accounts[0].balance == 0
+        accounts = api_manager.user_steps.get_all_accounts(user_request)
+        assert len(accounts) == 1
+        assert accounts[0].balance == 0
