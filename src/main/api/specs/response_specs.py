@@ -30,6 +30,7 @@ class ResponseSpecs:
     def request_returns_bad_request(error_value: str, error_key: str | None = None) -> Callable:
         def check(response: Response):
             assert response.status_code == HTTPStatus.BAD_REQUEST, response.text
+            print(response.text)
             if error_key:
                 assert error_value in response.json().get(error_key)
             else:

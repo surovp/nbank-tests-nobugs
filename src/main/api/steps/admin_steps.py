@@ -35,12 +35,20 @@ class AdminSteps(BaseSteps):
         CrudRequester(
             RequestSpecs.admin_auth_spec(),
             Endpoint.ADMIN_CREATE_USER,
-            ResponseSpecs.request_returns_bad_request(error_key, error_value)
+            ResponseSpecs.request_returns_bad_request(error_value, error_key)
         ).post(create_user_request)
 
     def get_all_users(self) -> List[CreateUserRequest]:
         response = ValidatedCrudRequester(
             RequestSpecs.admin_auth_spec(),
+            Endpoint.ADMIN_GET_ALL_USERS,
+            ResponseSpecs.request_returns_ok()
+        ).get()
+        return response
+
+    def get_all_users_as(self, admin_user_request : CreateUserRequest):
+        response = ValidatedCrudRequester(
+            RequestSpecs.auth_as_user(admin_user_request.username, admin_user_request.password),
             Endpoint.ADMIN_GET_ALL_USERS,
             ResponseSpecs.request_returns_ok()
         ).get()
