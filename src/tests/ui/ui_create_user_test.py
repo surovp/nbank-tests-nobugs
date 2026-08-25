@@ -12,6 +12,7 @@ from src.main.api.models.create_user_request import CreateUserRequest
 
 
 @pytest.mark.ui
+@pytest.mark.usefixtures("admin_session_autologin", "browser_match_guard")
 class TestCreateUser:
 
     @pytest.mark.admin_session

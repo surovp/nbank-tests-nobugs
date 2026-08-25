@@ -7,7 +7,7 @@ from src.main.api.classes.session_storage import SessionStorage
 from src.main.api.models.create_user_request import CreateUserRequest
 
 
-@pytest.fixture(autouse=True, scope="function")
+@pytest.fixture(scope="function")
 def user_session_extension(request, page, user_factory):
     SessionStorage.clear()
     mark = request.node.get_closest_marker("user_session")
@@ -22,7 +22,7 @@ def user_session_extension(request, page, user_factory):
     LoginPage(page).auth_as_user(users[auth_index])
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture()
 def admin_session_autologin(
     request: pytest.FixtureRequest, 
     page: Page, 
@@ -35,7 +35,7 @@ def admin_session_autologin(
     LoginPage(page).auth_as_user(admin_user_request)
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture()
 def browser_match_guard(request):
     mark = request.node.get_closest_marker("browsers")
     if not mark:
