@@ -83,7 +83,7 @@ class Endpoint(Enum):
     ADMIN_GET_ALL_USERS = EndpointConfig(
         url='/admin/users',
         request_model=None,
-        response_model=List[CreateUserRequest]
+        response_model=List[CreateUserResponse]
     )
 
     GET_CUSTOMER_ACCOUNTS = EndpointConfig(

@@ -1,6 +1,7 @@
 import pytest
 from src.main.api.classes.api_manager import ApiManager
 from src.main.api.generators.random_data import RandomData
+from src.main.api.models.comparison.dao_and_model_assertions import DaoAndModelAssertions
 from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.api.models.deposit_money_request import DepositMoneyRequest
 from src.main.api.models.transfer_money_request import TransferMoneyRequest
@@ -33,10 +34,13 @@ class TestTransferMoney:
         account = api_manager.user_steps.create_account(user_request)
         second_account = api_manager.user_steps.create_account(user_request)
         api_manager.deposit_steps.deposit_any_amount(user_request, account.id, balance)
-        api_manager.transfer_steps.transfer_self_account(
+        create = api_manager.transfer_steps.transfer_self_account(
             user_request,
             TransferMoneyRequest(senderAccountId=account.id, receiverAccountId=second_account.id, amount=amount)
         )
+
+        dao_transaction = api_manager.database_steps.get_transaction_by_account_id(second_account.id)
+        DaoAndModelAssertions.assert_that(create, dao_transaction).match()
 
     @pytest.mark.usefixtures("api_manager", 'user_request', 'user_with_account')
     @pytest.mark.parametrize(
@@ -61,12 +65,15 @@ class TestTransferMoney:
     ):
         account = api_manager.user_steps.create_account(user_request)
         api_manager.deposit_steps.deposit_any_amount(user_request, account.id, balance)
-        api_manager.transfer_steps.transfer(
+        create = api_manager.transfer_steps.transfer(
             user_request,
             TransferMoneyRequest(senderAccountId=account.id, receiverAccountId=user_with_account.id, amount=amount)
         )
 
-    @pytest.mark.usefixtures("api_manager", 'user_request', 'user_with_account')
+        dao_transaction = api_manager.database_steps.get_transaction_by_account_id(user_with_account.id)
+        DaoAndModelAssertions.assert_that(create, dao_transaction).match()
+
+    @pytest.mark.usefixtures("api_manager", 'user_request')
     @pytest.mark.parametrize(
         argnames='balance, amount, error_value',
         argvalues=[
@@ -80,18 +87,21 @@ class TestTransferMoney:
             self,
             user_request: CreateUserRequest,
             api_manager: ApiManager,
-            user_with_account,
             error_value,
             balance,
             amount
     ):
         account = api_manager.user_steps.create_account(user_request)
         api_manager.deposit_steps.deposit_any_amount(user_request, account.id, balance)
+        second_account = api_manager.user_steps.create_account(user_request)
         api_manager.transfer_steps.invalid_transfer(
             user_request,
-            TransferMoneyRequest(senderAccountId=account.id, receiverAccountId=account.id, amount=amount),
+            TransferMoneyRequest(senderAccountId=account.id, receiverAccountId=second_account.id, amount=amount),
             error_value
         )
+
+        dao_transaction = api_manager.database_steps.find_transaction_by_account_id(second_account.id)
+        assert dao_transaction is None, f"User '{account.id}' should NOT exist in DB after invalid create, but was found: {dao_transaction}"
 
 
     @pytest.mark.usefixtures("api_manager", 'user_request', 'user_with_account')
@@ -121,19 +131,25 @@ class TestTransferMoney:
             error_value
         )
 
-    @pytest.mark.usefixtures("api_manager", 'user_request', 'user_with_account')
+        dao_transaction = api_manager.database_steps.find_transaction_by_account_id(user_with_account.id)
+        assert dao_transaction is None, f"User '{user_with_account.id}' should NOT exist in DB after invalid create, but was found: {dao_transaction}"
+
+    @pytest.mark.usefixtures("api_manager", 'user_request')
     def test_transfer_empty_balance_self(
             self,
             user_request: CreateUserRequest,
-            api_manager: ApiManager,
-            user_with_account
+            api_manager: ApiManager
     ):
         account = api_manager.user_steps.create_account(user_request)
+        second_account = api_manager.user_steps.create_account(user_request)
         api_manager.transfer_steps.invalid_transfer(
             user_request,
-            TransferMoneyRequest(senderAccountId=account.id, receiverAccountId=account.id, amount=RandomData.get_deposit_amount()),
+            TransferMoneyRequest(senderAccountId=account.id, receiverAccountId=second_account.id, amount=RandomData.get_deposit_amount()),
             TransferErrors.INVALID_TRANSFER.value
         )
+
+        dao_transaction = api_manager.database_steps.find_transaction_by_account_id(second_account.id)
+        assert dao_transaction is None, f"User '{second_account.id}' should NOT exist in DB after invalid create, but was found: {dao_transaction}"
 
 
     @pytest.mark.usefixtures("api_manager", 'user_request', 'user_with_account')
@@ -150,6 +166,9 @@ class TestTransferMoney:
             TransferErrors.INVALID_TRANSFER.value
         )
 
+        dao_transaction = api_manager.database_steps.find_transaction_by_account_id(user_with_account.id)
+        assert dao_transaction is None, f"User '{user_with_account.id}' should NOT exist in DB after invalid create, but was found: {dao_transaction}"
+
     @pytest.mark.usefixtures("api_manager", 'user_request')
     def test_transfer_invalid_account(
             self,
@@ -158,13 +177,17 @@ class TestTransferMoney:
     ):
         account = api_manager.user_steps.create_account(user_request)
         balance = RandomData.get_deposit_amount()
+        receiver_invalid_acc = RandomData.get_invalid_account_id()
         api_manager.deposit_steps.deposit(user_request, DepositMoneyRequest(id=account.id, balance=balance))
         api_manager.transfer_steps.invalid_transfer(
             user_request,
             TransferMoneyRequest(
                 senderAccountId=account.id,
-                receiverAccountId=RandomData.get_invalid_account_id(),
+                receiverAccountId=receiver_invalid_acc,
                 amount=balance//2
             ),
             TransferErrors.INVALID_TRANSFER.value
         )
+
+        dao_transaction = api_manager.database_steps.find_transaction_by_account_id(receiver_invalid_acc)
+        assert dao_transaction is None, f"User '{receiver_invalid_acc}' should NOT exist in DB after invalid create, but was found: {dao_transaction}"

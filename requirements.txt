@@ -6,3 +6,4 @@ rstr
 playwright
 pytest-playwright
 pytest-xdist
+psycopg[binary]
