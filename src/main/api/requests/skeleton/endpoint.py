@@ -12,11 +12,14 @@ from src.main.api.models.deposit_money_request import DepositMoneyRequest
 from src.main.api.models.deposit_money_response import DepositMoneyResponse
 from src.main.api.models.customer_profile_response import CustomerProfileResponse
 from src.main.api.models.account_response import AccountsListResponse
+from src.main.api.models.deposit_request_fraud import DepositRequestFraud
+from src.main.api.models.deposit_response_fraud import DepositResponseFraud
 from src.main.api.models.get_customer_profile import GetCustomerProfile
 from src.main.api.models.login_user_request import LoginUserRequest
 from src.main.api.models.login_user_response import LoginUserResponse
 from src.main.api.models.transfer_money_request import TransferMoneyRequest
 from src.main.api.models.transfer_money_response import TransferMoneyResponse
+from src.main.api.models.transfer_money_response_fraud import TransferResponseFraudCheck
 
 
 @dataclass(frozen=True)
@@ -62,6 +65,12 @@ class Endpoint(Enum):
         response_model=DepositMoneyResponse
     )
 
+    DEPOSIT_FRAUD = EndpointConfig(
+        url='/accounts/deposit',
+        request_model=DepositRequestFraud,
+        response_model=DepositResponseFraud
+    )
+
     EDIT_CUSTOMER_NAME = EndpointConfig(
         url='/customer/profile',
         request_model=CustomerProfileRequest,
@@ -90,4 +99,10 @@ class Endpoint(Enum):
         url='/customer/accounts',
         request_model=None,
         response_model=List[CreateAccountResponse]
+    )
+
+    TRANSFER_WITH_FRAUD_CHECK = EndpointConfig(
+        url='/accounts/transfer-with-fraud-check',
+        request_model=TransferMoneyRequest,
+        response_model=TransferResponseFraudCheck
     )

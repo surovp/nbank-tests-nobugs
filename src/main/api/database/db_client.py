@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from contextlib import contextmanager
 from dataclasses import dataclass
+from dataclasses import fields as dataclass_fields
 from enum import Enum
 from typing import Any, Dict, Generator, Optional, Tuple, Type, TypeVar
 
@@ -44,6 +45,19 @@ def fetch_one(sql: str, params: Optional[tuple[Any, ...]] = None) -> Optional[Di
             cur.execute(sql, params or ())
             row = cur.fetchone()
             return dict(row) if row is not None else None
+
+
+def _filter_row_for_dao(dao_cls: Type[T], row: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    DB tables can have more columns than our DAO dataclasses define.
+    Filter the returned row dict to only the DAO fields.
+    """
+    try:
+        allowed = {f.name for f in dataclass_fields(dao_cls)}  # type: ignore[arg-type]
+    except Exception:
+        # If it's not a dataclass (or introspection failed), keep the row as-is.
+        return row
+    return {k: v for k, v in row.items() if k in allowed}
 
 
 @dataclass(frozen=True)
@@ -111,7 +125,7 @@ class DBRequestBuilder:
         if row is None:
             raise AssertionError(f"DB row not found. SQL={sql}, params={params}")
 
-        return dao_cls(**row)  # type: ignore[arg-type]
+        return dao_cls(**_filter_row_for_dao(dao_cls, row))  # type: ignore[arg-type]
 
     def extract_optional_as(self, dao_cls: Type[T]) -> Optional[T]:
         if self._request_type != RequestType.SELECT:
@@ -129,4 +143,4 @@ class DBRequestBuilder:
         row = fetch_one(sql, params)
         if row is None:
             return None
-        return dao_cls(**row)  # type: ignore[arg-type]
+        return dao_cls(**_filter_row_for_dao(dao_cls, row))  # type: ignore[arg-type]
