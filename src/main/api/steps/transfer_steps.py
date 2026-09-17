@@ -4,6 +4,7 @@ from src.main.api.models.account_response import AccountsListResponse
 from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.api.models.transfer_money_request import TransferMoneyRequest
 from src.main.api.models.transfer_money_response import TransferMoneyResponse
+from src.main.api.models.transfer_money_response_fraud import TransferResponseFraudCheck
 from src.main.api.requests.skeleton.endpoint import Endpoint
 from src.main.api.requests.skeleton.requesters.crud_requester import CrudRequester
 from src.main.api.requests.skeleton.requesters.validated_crud_requester import ValidatedCrudRequester
@@ -98,3 +99,17 @@ class TransferSteps(BaseSteps):
         ).get(as_list=True)
 
         assert account_response[0].balance == balance_response[0].balance
+
+    def transfer_with_fraud_check(
+            self,
+            user_request: CreateUserRequest,
+            transfer_request: TransferMoneyRequest,
+    ) -> TransferResponseFraudCheck:
+
+        transfer_response: TransferResponseFraudCheck = ValidatedCrudRequester(
+            RequestSpecs.auth_as_user(user_request.username, user_request.password),
+            Endpoint.TRANSFER_WITH_FRAUD_CHECK,
+            ResponseSpecs.request_returns_ok()
+        ).post(transfer_request)
+
+        return transfer_response
