@@ -5,6 +5,8 @@ from src.main.api.models.account_response import AccountsListResponse
 from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.api.models.deposit_money_request import DepositMoneyRequest
 from src.main.api.models.deposit_money_response import DepositMoneyResponse
+from src.main.api.models.deposit_request_fraud import DepositRequestFraud
+from src.main.api.models.deposit_response_fraud import DepositResponseFraud
 from src.main.api.requests.skeleton.endpoint import Endpoint
 from src.main.api.requests.skeleton.requesters.crud_requester import CrudRequester
 from src.main.api.requests.skeleton.requesters.validated_crud_requester import ValidatedCrudRequester
@@ -81,3 +83,17 @@ class DepositSteps(BaseSteps):
         ).get(as_list=True)
 
         assert get_balance_account(balances_response, deposit_request.id) == 0
+
+    def deposit_to_account_fraud(
+            self,
+            user_request: CreateUserRequest,
+            account_id: int,
+            amount: float
+    ) -> DepositResponseFraud:
+        deposit_request = DepositRequestFraud(accountId=account_id, amount=amount)
+        deposit_response: DepositResponseFraud = ValidatedCrudRequester(
+            RequestSpecs.auth_as_user(user_request.username, user_request.password),
+            Endpoint.DEPOSIT_FRAUD,
+            ResponseSpecs.request_returns_ok()
+        ).post(deposit_request)
+        return deposit_response

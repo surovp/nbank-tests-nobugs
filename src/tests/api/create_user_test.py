@@ -3,17 +3,22 @@ import pytest
 from src.main.api.classes.api_manager import ApiManager
 from src.main.api.generators.random_data import RandomData
 from src.main.api.generators.random_model_generator import RandomModelGenerator
+from src.main.api.models.comparison.dao_and_model_assertions import DaoAndModelAssertions
 from src.main.api.models.comparison.model_assertions import ModelAssertions
 from src.main.api.models.create_user_request import CreateUserRequest
 
 
 
 @pytest.mark.api
+@pytest.mark.api_version("with_database")
 class TestCreateUser:
     @pytest.mark.check_all_users_change(delta=1, username_source="create_user_request.username", should_exist=True)
     @pytest.mark.parametrize('create_user_request', [RandomModelGenerator.generate(CreateUserRequest)])
     def test_create_valid_user(self, create_user_request: CreateUserRequest, api_manager: ApiManager):
-        api_manager.admin_steps.create_user(create_user_request)
+        created = api_manager.admin_steps.create_user(create_user_request)
+
+        user_dao = api_manager.database_steps.get_user_by_username(created.username)
+        DaoAndModelAssertions.assert_that(created, user_dao).match()
 
     @pytest.mark.usefixtures('api_manager')
     @pytest.mark.parametrize(
@@ -39,3 +44,6 @@ class TestCreateUser:
     ):
         create_user_request = CreateUserRequest(username=username, password=password, role=role)
         api_manager.admin_steps.create_invalid_user(create_user_request, error_key, error_value)
+
+        user_dao = api_manager.database_steps.find_user_by_username(username)
+        assert user_dao is None, f"User '{username}' should NOT exist in DB after invalid create, but was found: {user_dao}"

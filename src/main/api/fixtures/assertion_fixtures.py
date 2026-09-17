@@ -31,7 +31,7 @@ def _resolve_source(request: pytest.FixtureRequest, source: str) -> Any:
     return value
 
 
-@pytest.fixture(autouse=True, scope="function")
+@pytest.fixture(scope="function")
 def entity_will_be_created(request: pytest.FixtureRequest):
     """
     Marker-driven helper for cleanup: adds entity/entities to `created_objects`.
@@ -65,7 +65,7 @@ def entity_will_be_created(request: pytest.FixtureRequest):
     yield
 
 
-@pytest.fixture(autouse=True, scope="function")
+@pytest.fixture(scope="function")
 def check_all_users_change(request: pytest.FixtureRequest, created_objects):
     """
     Marker-driven post-action verification for API tests.
@@ -129,7 +129,7 @@ def check_all_users_change(request: pytest.FixtureRequest, created_objects):
         )
 
 
-@pytest.fixture(autouse=True, scope="function")
+@pytest.fixture(scope="function")
 def check_accounts_change(request: pytest.FixtureRequest):
     """
     Marker-driven post-action verification for accounts (customer accounts list).

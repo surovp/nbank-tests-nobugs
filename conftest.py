@@ -1,15 +1,21 @@
+import os
+import random
+import time
+import pytest
+from src.main.api.classes.session_storage import SessionStorage
+from src.main.api.fixtures.api_fixtures import *
+from src.main.api.fixtures.assertion_fixtures import *
+from src.main.api.fixtures.fraud_fixtures import *
+from src.main.api.fixtures.object_fixtures import *
+from src.main.api.fixtures.prepare_data_fixtures import *
 from src.main.api.fixtures.setup_hook import *
 from src.main.api.fixtures.user_fixtures import *
-from src.main.api.fixtures.api_fixtures import *
-from src.main.api.fixtures.object_fixtures import *
-import os
-import time
-import random
+from src.main.api.utils.browsers import norm_browser_name
+
 
 
 def _apply_global_seed(seed: int) -> None:
     random.seed(seed)
-
     try:
         from faker import Faker
         Faker.seed(seed)
@@ -23,13 +29,21 @@ def _apply_global_seed(seed: int) -> None:
     except Exception:
         pass
 
+
 def pytest_addoption(parser: pytest.Parser) -> None:
     parser.addoption(
         "--seed",
         action="store",
         default=os.getenv("PYTEST_SEED"),
-        help="..."
+        help="Seed for random generators. If not set, a new seed is generated per run (and shared across xdist workers).",
     )
+    parser.addoption(
+        "--api-version",
+        action="store",
+        default=os.getenv("API_VERSION"),
+        help="Backend version under test. Used with @pytest.mark.api_version(...). Example: --api-version with_database",
+    )
+
 
 def pytest_configure(config: pytest.Config) -> None:
     seed = None
@@ -43,18 +57,24 @@ def pytest_configure(config: pytest.Config) -> None:
     config._nbank_seed = int(seed)
     _apply_global_seed(int(seed))
 
+    api_version = config.getoption("--api-version")
+    if api_version:
+        os.environ["TEST_API_VERSION"] = str(api_version)
+
+
 def pytest_configure_node(node) -> None:
     seed = getattr(node.config, "_nbank_seed", None)
     if seed is not None:
         node.workerinput["seed"] = int(seed)
+
 
 def pytest_collection_finish(session: pytest.Session) -> None:
     config = session.config
     base_seed = getattr(config, "_nbank_seed", None)
     if base_seed is None:
         return
-    workerid = None
 
+    workerid = None
     if hasattr(config, "workerinput"):
         workerid = config.workerinput.get("workerid")
 
@@ -72,13 +92,26 @@ def pytest_collection_finish(session: pytest.Session) -> None:
 
 def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item]) -> None:
     preferred = "chromium"
+    api_version = config.getoption("--api-version")
 
     filtered: list[pytest.Item] = []
 
     for item in items:
         is_ui = bool(item.get_closest_marker("ui"))
         browsers_mark = item.get_closest_marker("browsers")
+        api_ver_mark = item.get_closest_marker("api_version")
         fixts = getattr(item, "fixturenames", ()) or ()
+
+        # Если указан --api-version, запускаем ТОЛЬКО тесты с этим маркером
+        if api_version:
+            if not api_ver_mark:
+                continue  # Пропускаем тесты без маркера
+            expected = str(api_ver_mark.args[0]) if api_ver_mark.args else ""
+            if expected != api_version:
+                continue  # Пропускаем тесты с другой версией
+
+        # Если --api-version НЕ указан, запускаем все тесты (как раньше)
+        # или можно пропускать тесты с маркером - зависит от ваших потребностей
 
         if browsers_mark:
             allowed = {norm_browser_name(str(x)) for x in (browsers_mark.args or ())}
@@ -99,6 +132,6 @@ def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item
 
     items[:] = filtered
 
-@pytest.fixture(autouse= True, scope="function")
+@pytest.fixture(autouse=True, scope="function")
 def clear_storage():
     SessionStorage.clear()

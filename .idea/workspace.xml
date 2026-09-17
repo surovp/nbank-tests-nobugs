@@ -4,18 +4,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="be78f9fa-e103-4d93-baf7-187b8cde681d" name="Changes" comment="Рефакторинг тестов&#10;Добавлены маркеры">
+    <list default="true" id="be78f9fa-e103-4d93-baf7-187b8cde681d" name="Changes" comment="* Добавлен клиент для работы с БД&#10;* Обновлены тесты с проверкой в БД&#10;* Добавлен новый маркер для запуска тестов с БД">
+      <change afterPath="$PROJECT_DIR$/src/main/api/fixtures/fraud_fixtures.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/api/fixtures/prepare_data_fixtures.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/api/models/deposit_request_fraud.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/api/models/deposit_response_fraud.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/api/models/transfer_money_response_fraud.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/api/specs/fraud_mock.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/tests/api/transfer_with_fraud_check_test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/conftest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/infra/docker-compose/docker-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/docker-compose/docker-compose.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pytest.ini" beforeDir="false" afterPath="$PROJECT_DIR$/pytest.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/model-comparison.properties" beforeDir="false" afterPath="$PROJECT_DIR$/resources/model-comparison.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/api/database/db_client.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/api/database/db_client.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/api/fixtures/assertion_fixtures.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/api/fixtures/assertion_fixtures.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/api/fixtures/setup_hook.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/api/fixtures/setup_hook.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tests/ui/ui_create_account_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/ui/ui_create_account_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tests/ui/ui_create_user_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/ui/ui_create_user_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tests/ui/ui_customer_profile_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/ui/ui_customer_profile_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tests/ui/ui_deposit_account_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/ui/ui_deposit_account_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tests/ui/ui_login_user_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/ui/ui_login_user_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tests/ui/ui_transfer_money_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/ui/ui_transfer_money_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/api/models/comparison/model_assertions.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/api/models/comparison/model_assertions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/api/models/create_account_response.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/api/models/create_account_response.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/api/requests/skeleton/endpoint.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/api/requests/skeleton/endpoint.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/api/specs/response_specs.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/api/specs/response_specs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/api/steps/deposit_steps.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/api/steps/deposit_steps.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/api/steps/transfer_steps.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/api/steps/transfer_steps.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,7 +42,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="realization-db-tests" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -75,11 +84,26 @@
     "Python tests.Python tests for src.tests.api.create_user_test.TestCreateUser.executor": "Run",
     "Python tests.Python tests for src.tests.api.create_user_test.TestCreateUser.test_create_invalid_user.executor": "Run",
     "Python tests.Python tests for src.tests.api.create_user_test.TestCreateUser.test_create_valid_user.executor": "Run",
+    "Python tests.Python tests for src.tests.api.customer_profile_test.TestCustomerProfile.executor": "Run",
+    "Python tests.Python tests for src.tests.api.customer_profile_test.TestCustomerProfile.test_customer_invalid_name.executor": "Run",
     "Python tests.Python tests for src.tests.api.customer_profile_test.TestCustomerProfile.test_customer_name.executor": "Run",
+    "Python tests.Python tests for src.tests.api.deposit_account_test.TestDepositAccount.test_deposit_account.executor": "Run",
     "Python tests.Python tests for src.tests.api.deposit_account_test.TestDepositAccount.test_invalid_balance_account.executor": "Run",
+    "Python tests.Python tests for src.tests.api.deposit_account_test.TestDepositAccount.test_invalid_id_account.executor": "Run",
+    "Python tests.Python tests for src.tests.api.deposit_account_test.TestDepositAccount.test_not_found_account.executor": "Run",
     "Python tests.Python tests for src.tests.api.login_user_test.TestLoginUser.executor": "Run",
     "Python tests.Python tests for src.tests.api.login_user_test.TestLoginUser.test_login_admin_user.executor": "Run",
     "Python tests.Python tests for src.tests.api.login_user_test.TestLoginUser.test_login_user.executor": "Run",
+    "Python tests.Python tests for src.tests.api.transfer_money_test.TestTransferMoney.test_transfer_amount_another_account.executor": "Run",
+    "Python tests.Python tests for src.tests.api.transfer_money_test.TestTransferMoney.test_transfer_amount_self.executor": "Run",
+    "Python tests.Python tests for src.tests.api.transfer_money_test.TestTransferMoney.test_transfer_empty_balance_another_account.executor": "Run",
+    "Python tests.Python tests for src.tests.api.transfer_money_test.TestTransferMoney.test_transfer_empty_balance_self.executor": "Run",
+    "Python tests.Python tests for src.tests.api.transfer_money_test.TestTransferMoney.test_transfer_invalid_account.executor": "Run",
+    "Python tests.Python tests for src.tests.api.transfer_money_test.TestTransferMoney.test_transfer_invalid_amount_another_account.executor": "Run",
+    "Python tests.Python tests for src.tests.api.transfer_money_test.TestTransferMoney.test_transfer_invalid_amount_self.executor": "Run",
+    "Python tests.Python tests for src.tests.api.transfer_with_fraud_check_test.TestTransferWithFraudCheck.executor": "Run",
+    "Python tests.Python tests for src.tests.api.transfer_with_fraud_check_test.TestTransferWithFraudCheck.test_transfer_with_fraud_check.executor": "Run",
+    "Python tests.Python tests for src.tests.api.transfer_with_fraud_check_test.TestTransferWithFraudCheck.test_transfer_with_fraud_check_approved.executor": "Run",
     "Python tests.Python tests for src.tests.ui.create_account_test_ui.TestCreateAccount.test_user_can_create_account.executor": "Run",
     "Python tests.Python tests for src.tests.ui.create_user_test_ui.TestCreateUser.executor": "Run",
     "Python tests.Python tests for src.tests.ui.create_user_test_ui.TestCreateUser.test_admin_can_create_user.executor": "Run",
@@ -115,7 +139,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "parallel-tests",
+    "git-widget-placeholder": "realization-mock-test",
     "last_opened_file_path": "C:/Users/Pavel/PycharmProjects/nbank-tests",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -132,8 +156,8 @@
       <recent name="C:\Users\Pavel\PycharmProjects\nbank-tests\src" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests for src.tests.api.create_user_test.TestCreateUser">
-    <configuration name="Python tests for src.tests.api.create_account_test.TestCreateAccount.test_create_account" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python tests.Python tests for src.tests.api.transfer_with_fraud_check_test.TestTransferWithFraudCheck.test_transfer_with_fraud_check_approved">
+    <configuration name="Python tests for src.tests.api.transfer_money_test.TestTransferMoney.test_transfer_empty_balance_another_account" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="nbank-tests" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -144,11 +168,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;src.tests.api.create_account_test.TestCreateAccount.test_create_account&quot;" />
+      <option name="_new_target" value="&quot;src.tests.api.transfer_money_test.TestTransferMoney.test_transfer_empty_balance_another_account&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for src.tests.api.create_user_test.TestCreateUser" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for src.tests.api.transfer_money_test.TestTransferMoney.test_transfer_invalid_account" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="nbank-tests" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -159,11 +183,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;src.tests.api.create_user_test.TestCreateUser&quot;" />
+      <option name="_new_target" value="&quot;src.tests.api.transfer_money_test.TestTransferMoney.test_transfer_invalid_account&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for src.tests.ui.ui_deposit_account_test.TestDepositAccount.test_user_no_select_account" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for src.tests.api.transfer_with_fraud_check_test.TestTransferWithFraudCheck" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="nbank-tests" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -174,11 +198,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;src.tests.ui.ui_deposit_account_test.TestDepositAccount.test_user_no_select_account&quot;" />
+      <option name="_new_target" value="&quot;src.tests.api.transfer_with_fraud_check_test.TestTransferWithFraudCheck&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for src.tests.ui.ui_transfer_money_test.TestTransferMoney" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for src.tests.api.transfer_with_fraud_check_test.TestTransferWithFraudCheck.test_transfer_with_fraud_check" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="nbank-tests" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -189,11 +213,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;src.tests.ui.ui_transfer_money_test.TestTransferMoney&quot;" />
+      <option name="_new_target" value="&quot;src.tests.api.transfer_with_fraud_check_test.TestTransferWithFraudCheck.test_transfer_with_fraud_check&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for src.tests.ui.ui_transfer_money_test.TestTransferMoney.test_user_can_transfer_money_any" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for src.tests.api.transfer_with_fraud_check_test.TestTransferWithFraudCheck.test_transfer_with_fraud_check_approved" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="nbank-tests" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -204,17 +228,17 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;src.tests.ui.ui_transfer_money_test.TestTransferMoney.test_user_can_transfer_money_any&quot;" />
+      <option name="_new_target" value="&quot;src.tests.api.transfer_with_fraud_check_test.TestTransferWithFraudCheck.test_transfer_with_fraud_check_approved&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.Python tests for src.tests.api.create_user_test.TestCreateUser" />
-        <item itemvalue="Python tests.Python tests for src.tests.api.create_account_test.TestCreateAccount.test_create_account" />
-        <item itemvalue="Python tests.Python tests for src.tests.ui.ui_deposit_account_test.TestDepositAccount.test_user_no_select_account" />
-        <item itemvalue="Python tests.Python tests for src.tests.ui.ui_transfer_money_test.TestTransferMoney" />
-        <item itemvalue="Python tests.Python tests for src.tests.ui.ui_transfer_money_test.TestTransferMoney.test_user_can_transfer_money_any" />
+        <item itemvalue="Python tests.Python tests for src.tests.api.transfer_with_fraud_check_test.TestTransferWithFraudCheck.test_transfer_with_fraud_check_approved" />
+        <item itemvalue="Python tests.Python tests for src.tests.api.transfer_with_fraud_check_test.TestTransferWithFraudCheck" />
+        <item itemvalue="Python tests.Python tests for src.tests.api.transfer_with_fraud_check_test.TestTransferWithFraudCheck.test_transfer_with_fraud_check" />
+        <item itemvalue="Python tests.Python tests for src.tests.api.transfer_money_test.TestTransferMoney.test_transfer_invalid_account" />
+        <item itemvalue="Python tests.Python tests for src.tests.api.transfer_money_test.TestTransferMoney.test_transfer_empty_balance_another_account" />
       </list>
     </recent_temporary>
   </component>
@@ -267,7 +291,23 @@
       <option name="project" value="LOCAL" />
       <updated>1787163588268</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="ДОбавлены новые фикстуры для обработки и корректной генерации запуска тестов в параллели">
+      <option name="closed" value="true" />
+      <created>1787651077322</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1787651077322</updated>
+    </task>
+    <task id="LOCAL-00006" summary="* Добавлен клиент для работы с БД&#10;* Обновлены тесты с проверкой в БД&#10;* Добавлен новый маркер для запуска тестов с БД">
+      <option name="closed" value="true" />
+      <created>1787827709147</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1787827709147</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -278,7 +318,9 @@
     <MESSAGE value="Модифицировал фреймворк из урока senior и стабилизации тестов" />
     <MESSAGE value="Домашнее задание по UI тестам&#10;Добавлены:&#10;*Новые алерты&#10;*Страницы Ред профиля, Пополнения, Перевода&#10;*Тесты" />
     <MESSAGE value="В тестах расширил прогон в браузерах&#10;Добавил wait_until&#10;Поправил ссылку на образ в докер&#10;Изменил порядок аргументов" />
-    <option name="LAST_COMMIT_MESSAGE" value="В тестах расширил прогон в браузерах&#10;Добавил wait_until&#10;Поправил ссылку на образ в докер&#10;Изменил порядок аргументов" />
+    <MESSAGE value="ДОбавлены новые фикстуры для обработки и корректной генерации запуска тестов в параллели" />
+    <MESSAGE value="* Добавлен клиент для работы с БД&#10;* Обновлены тесты с проверкой в БД&#10;* Добавлен новый маркер для запуска тестов с БД" />
+    <option name="LAST_COMMIT_MESSAGE" value="* Добавлен клиент для работы с БД&#10;* Обновлены тесты с проверкой в БД&#10;* Добавлен новый маркер для запуска тестов с БД" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
