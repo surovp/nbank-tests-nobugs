@@ -10,6 +10,7 @@ from src.main.ui.pages.deposit_page import DepositMoney
 
 
 @pytest.mark.ui
+@pytest.mark.usefixtures("user_session_extension", "browser_match_guard")
 class TestDepositAccount:
     @pytest.mark.user_session(1)
     def test_user_can_deposit_account(self, page: Page, user_request: CreateUserRequest, api_manager: ApiManager):

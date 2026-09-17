@@ -13,6 +13,7 @@ from src.main.ui.pages.transfer_page import TransferMoney
 
 
 @pytest.mark.ui
+@pytest.mark.usefixtures("user_session_extension", "browser_match_guard")
 class TestTransferMoney:
     @pytest.mark.user_session(1)
     def test_user_can_transfer_money_self(self, page: Page, user_request: CreateUserRequest, api_manager: ApiManager):

@@ -38,7 +38,7 @@ class AdminSteps(BaseSteps):
             ResponseSpecs.request_returns_bad_request(error_value, error_key)
         ).post(create_user_request)
 
-    def get_all_users(self) -> List[CreateUserRequest]:
+    def get_all_users(self) -> List[CreateUserResponse]:
         response = ValidatedCrudRequester(
             RequestSpecs.admin_auth_spec(),
             Endpoint.ADMIN_GET_ALL_USERS,

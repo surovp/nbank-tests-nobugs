@@ -12,6 +12,7 @@ from src.main.ui.pages.profile_page import Profile
 
 
 @pytest.mark.ui
+@pytest.mark.usefixtures("user_session_extension", "browser_match_guard")
 class TestEditProfile:
     @pytest.mark.user_session(1)
     def test_edit_profile(self, page: Page, user_request: CreateUserRequest, api_manager: ApiManager):

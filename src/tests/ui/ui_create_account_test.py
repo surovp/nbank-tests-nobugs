@@ -1,5 +1,5 @@
 import pytest
-from playwright.sync_api import expect, Page
+from playwright.sync_api import Page
 from src.main.api.classes.api_manager import ApiManager
 from src.main.api.fixtures.api_fixtures import api_manager
 from src.main.api.models.create_user_request import CreateUserRequest
@@ -8,6 +8,7 @@ from src.main.ui.pages.user_dashboard import UserDashboard
 
 
 @pytest.mark.ui
+@pytest.mark.usefixtures("user_session_extension", "browser_match_guard")
 class TestCreateAccount:
     @pytest.mark.user_session(1)
     @pytest.mark.check_accounts_change(delta=1)

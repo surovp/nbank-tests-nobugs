@@ -3,6 +3,7 @@ from src.main.api.steps.customer_steps import CustomerSteps
 from src.main.api.steps.deposit_steps import DepositSteps
 from src.main.api.steps.transfer_steps import TransferSteps
 from src.main.api.steps.user_steps import UserSteps
+from src.main.api.steps.database_steps import DataBaseSteps
 
 
 class ApiManager:
@@ -12,3 +13,4 @@ class ApiManager:
         self.deposit_steps = DepositSteps(created_object)
         self.transfer_steps = TransferSteps(created_object)
         self.customer_steps = CustomerSteps(created_object)
+        self.database_steps = DataBaseSteps
