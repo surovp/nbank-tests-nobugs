@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# ============================================================
-#  run-tests-with-docker-compose.sh
-#  Поднимает окружение, запускает API и UI тесты, гасит окружение.
-# ============================================================
-
 # ---------- Настройки ----------
 COMPOSE_FILE="infra/docker-compose/docker-compose.yaml"
 TEST_IMAGE="python-tests:first-dockerfile"
