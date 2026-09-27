@@ -7,7 +7,7 @@ from src.main.api.specs.response_specs import CustomerErrors
 
 
 @pytest.mark.api
-@pytest.mark.api_version("with_database")
+@pytest.mark.api_version("with_database_with_fix_with_swagger")
 class TestCustomerProfile:
 
     @pytest.mark.usefixtures("api_manager", 'user_request')
@@ -23,8 +23,8 @@ class TestCustomerProfile:
     def test_customer_name(self, user_request: CreateUserRequest, api_manager: ApiManager, name):
         created = api_manager.customer_steps.update_customer_name(user_request, CustomerProfileRequest(name=name))
 
-        dao_name = api_manager.database_steps.get_name_by_customer_name(created.customer.name)
-        DaoAndModelAssertions.assert_that(created.customer, dao_name).match()
+        dao_name = api_manager.database_steps.get_name_by_customer_name(created.name)
+        DaoAndModelAssertions.assert_that(created, dao_name).match()
 
     @pytest.mark.usefixtures("api_manager", 'user_request')
     @pytest.mark.parametrize(

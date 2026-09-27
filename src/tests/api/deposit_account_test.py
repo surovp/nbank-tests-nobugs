@@ -12,7 +12,7 @@ from src.main.api.specs.response_specs import DepositErrors
 
 
 @pytest.mark.api
-@pytest.mark.api_version("with_database")
+@pytest.mark.api_version("with_database_with_fix_with_swagger")
 class TestDepositAccount:
 
     @pytest.mark.usefixtures("api_manager", 'user_request')
@@ -22,7 +22,8 @@ class TestDepositAccount:
     )
     def test_deposit_account(self, user_request: CreateUserRequest, api_manager: ApiManager, balance):
         account = api_manager.user_steps.create_account(user_request)
-        create = api_manager.deposit_steps.deposit(user_request, DepositMoneyRequest(id=account.id, balance=balance))
+        create = api_manager.deposit_steps.deposit(user_request, DepositMoneyRequest(
+            accountId=account.id, amount=balance))
 
         dao_balance = api_manager.database_steps.get_account_by_account_number(create.accountNumber)
         DaoAndModelAssertions.assert_that(create, dao_balance).match()
@@ -48,7 +49,7 @@ class TestDepositAccount:
         account = api_manager.user_steps.create_account(user_request)
         api_manager.deposit_steps.invalid_deposit(
             user_request,
-            DepositMoneyRequest(id=account.id, balance=balance),
+            DepositMoneyRequest(accountId=account.id, amount=balance),
             error_value
         )
 
@@ -65,7 +66,7 @@ class TestDepositAccount:
         api_manager.user_steps.create_account(user_request)
         api_manager.deposit_steps.invalid_deposit(
             user_request,
-            DepositMoneyRequest(id=user_with_account.id, balance=RandomData.get_deposit_amount()),
+            DepositMoneyRequest(accountId=user_with_account.id, amount=RandomData.get_deposit_amount()),
             DepositErrors.UNAUTHORIZED_ACCOUNT.value,
             HTTPStatus.FORBIDDEN
         )
@@ -78,7 +79,7 @@ class TestDepositAccount:
         acc_id = RandomData.get_invalid_account_id()
         api_manager.deposit_steps.invalid_deposit(
             user_request,
-            DepositMoneyRequest(id=acc_id, balance=RandomData.get_deposit_amount()),
+            DepositMoneyRequest(accountId=acc_id, amount=RandomData.get_deposit_amount()),
             DepositErrors.UNAUTHORIZED_ACCOUNT.value,
             HTTPStatus.FORBIDDEN
         )

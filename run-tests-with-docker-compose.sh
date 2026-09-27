@@ -3,7 +3,7 @@ set -euo pipefail
 
 # ---------- Настройки ----------
 COMPOSE_FILE="infra/docker-compose/docker-compose.yaml"
-TEST_IMAGE="python-tests:first-dockerfile"
+TEST_IMAGE="python-tests:with-stab-tests"
 
 # Имя compose-сети
 NETWORK_NAME="docker-compose_nbank-network"
@@ -14,7 +14,7 @@ UI_BASE_URL="http://frontend:80"
 
 API_MARKER="api"
 UI_MARKER="ui"
-API_VERSION="with_fraud_check"
+API_VERSION="with_database_with_fix_with_swagger"
 
 # ---------- Проверки ----------
 if [[ ! -f "${COMPOSE_FILE}" ]]; then
@@ -83,4 +83,4 @@ docker run --rm \
   pytest -m ui
 
 echo ""
-echo "✅ Все тесты завершены."
+echo "✅ Все тесты завершены успешно!"

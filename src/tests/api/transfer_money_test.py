@@ -9,6 +9,7 @@ from src.main.api.specs.response_specs import TransferErrors
 
 
 @pytest.mark.api
+@pytest.mark.api_version("with_database_with_fix_with_swagger")
 class TestTransferMoney:
 
     @pytest.mark.usefixtures("api_manager", 'user_request')
@@ -178,7 +179,7 @@ class TestTransferMoney:
         account = api_manager.user_steps.create_account(user_request)
         balance = RandomData.get_deposit_amount()
         receiver_invalid_acc = RandomData.get_invalid_account_id()
-        api_manager.deposit_steps.deposit(user_request, DepositMoneyRequest(id=account.id, balance=balance))
+        api_manager.deposit_steps.deposit(user_request, DepositMoneyRequest(accountId=account.id, amount=balance))
         api_manager.transfer_steps.invalid_transfer(
             user_request,
             TransferMoneyRequest(
