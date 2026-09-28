@@ -78,7 +78,7 @@ jobs:
           UI_BASE_URL: http://localhost:3000
           DB_HOST: localhost
           # при push inputs нет — подставляем значения по умолчанию
-          API_VERSION_INPUT: ${{ github.event_name == 'workflow_dispatch' && inputs.api_version || 'with_database' }}
+          API_VERSION_INPUT: ${{ github.event_name == 'workflow_dispatch' && inputs.api_version || 'with_database_with_fix_with_swagger' }}
           SUITE_INPUT: ${{ github.event_name == 'workflow_dispatch' && inputs.suite || 'api' }}
           MARKERS_INPUT: ${{ github.event_name == 'workflow_dispatch' && inputs.markers || '' }}
         run: |
