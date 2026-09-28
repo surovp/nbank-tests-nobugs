@@ -20,9 +20,9 @@ on:
         required: true
         type: choice
         options:
-          -api
-          -ui
-          -api+ui
+          - api
+          - ui
+          - api+ui
       markers:
         description: "пайтест маркеры"
         required: false
@@ -84,7 +84,7 @@ jobs:
           # при push inputs нет — подставляем значения по умолчанию
           API_VERSION_INPUT: ${{ github.event_name == 'workflow_dispatch' && inputs.api_version || 'with_database' }}
           SUITE_INPUT: ${{ github.event_name == 'workflow_dispatch' && inputs.suite || 'api' }}
-          MARKERS_INPUT: ${{ github.event_name == 'workflow_dispatch' && inputs.markers
+          MARKERS_INPUT: ${{ github.event_name == 'workflow_dispatch' && inputs.markers || '' }}
         run: |
           set -eux
           
