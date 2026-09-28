@@ -1,20 +1,16 @@
 name: Run tests
 
-# тригер запуска
 on:
   workflow_dispatch:
     inputs:
       api_version:
         description: 'Backend version tag (matches @pytest.mark.api_version(...))'
-        # api_version обязателен для передачи
         required: true
-        # выпадающий список
         type: choice
         options:
           - with_database
           - with_fraud_check
           - with_database_with_fix_with_swagger
-      # какой набор тесто запускать
       suite:
         description: "Какой съют запускать"
         required: true
