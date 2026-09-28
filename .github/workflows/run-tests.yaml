@@ -60,7 +60,7 @@ jobs:
 
       - name: Start services
         env:
-          BACKEND_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.backend_tag || 'with_database_with_fix' }}
+          BACKEND_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.backend_tag || 'with_database_with_fix_with_swagger' }}
         run: |
           export NBANK_BACKEND_IMAGE="nobugsme/nbank:${BACKEND_TAG}"
           docker compose -f infra/docker-compose/docker-compose.yaml up -d
@@ -78,13 +78,13 @@ jobs:
           UI_BASE_URL: http://localhost:3000
           DB_HOST: localhost
           # при push inputs нет — подставляем значения по умолчанию
-          API_VERSION_INPUT: ${{ github.event_name == 'workflow_dispatch' && inputs.api_version || 'with_database_with_fix' }}
+          API_VERSION_INPUT: ${{ github.event_name == 'workflow_dispatch' && inputs.api_version || 'with_database_with_fix_with_swagger' }}
           SUITE_INPUT: ${{ github.event_name == 'workflow_dispatch' && inputs.suite || 'api' }}
           MARKERS_INPUT: ${{ github.event_name == 'workflow_dispatch' && inputs.markers || '' }}
         run: |
           set -eux
           
-          API_VERSION_INPUT="${API_VERSION_INPUT:-with_database_with_fix}"
+          API_VERSION_INPUT="${API_VERSION_INPUT:-with_database_with_fix_with_swagger}"
           SUITE_INPUT="${SUITE_INPUT:-api}"
           MARKERS="${MARKERS_INPUT:-}"
           
