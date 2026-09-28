@@ -10,4 +10,4 @@ class CreateUserResponse(BaseModel):
     password: Optional[str] = None
     name: Optional[str]
     role: str
-    accounts: List[Dict[str, Any]]
+    accounts: List[Dict[str, Any]] | None = None

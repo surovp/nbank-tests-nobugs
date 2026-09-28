@@ -17,10 +17,8 @@ class AccountResponse(BaseModel):
 class CustomerResponse(BaseModel):
     id: int
     username: str
-    password: str
     name: str
     role: str
-    accounts: Optional[List[AccountResponse]] = []
 
 class CustomerProfileResponse(BaseModel):
     customer: CustomerResponse

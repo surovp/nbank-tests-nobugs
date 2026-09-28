@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 
 
 class GetTransactionResponse(BaseModel):
@@ -18,7 +18,5 @@ class GetAccountResponse(BaseModel):
 class GetCustomerProfile(BaseModel):
     id: int
     username: str
-    password: str
     name: str | None
     role: str
-    accounts: List[GetAccountResponse]
