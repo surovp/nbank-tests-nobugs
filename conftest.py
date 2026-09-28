@@ -98,14 +98,15 @@ def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item
 
     for item in items:
         is_ui = bool(item.get_closest_marker("ui"))
+        is_api = bool(item.get_closest_marker("api"))
         browsers_mark = item.get_closest_marker("browsers")
         api_ver_mark = item.get_closest_marker("api_version")
         fixts = getattr(item, "fixturenames", ()) or ()
 
         # Если указан --api-version, запускаем ТОЛЬКО тесты с этим маркером
-        if api_version:
+        if api_version and is_api:
             if not api_ver_mark:
-                continue  # Пропускаем тесты без маркера
+                continue
             expected = str(api_ver_mark.args[0]) if api_ver_mark.args else ""
             if expected != api_version:
                 continue  # Пропускаем тесты с другой версией

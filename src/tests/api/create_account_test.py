@@ -5,7 +5,7 @@ from src.main.api.models.comparison.dao_and_model_assertions import DaoAndModelA
 
 
 @pytest.mark.api
-@pytest.mark.api_version("with_database")
+@pytest.mark.api_version("with_database_with_fix_with_swagger")
 class TestCreateAccount:
     @pytest.mark.check_accounts_change(delta=1)
     def test_create_account(self, api_manager: ApiManager, user_request: CreateUserRequest):

@@ -10,7 +10,7 @@ from src.main.api.models.create_user_response import CreateUserResponse
 from src.main.api.models.customer_profile_request import CustomerProfileRequest
 from src.main.api.models.deposit_money_request import DepositMoneyRequest
 from src.main.api.models.deposit_money_response import DepositMoneyResponse
-from src.main.api.models.customer_profile_response import CustomerProfileResponse
+from src.main.api.models.customer_profile_response import CustomerProfileResponse, CustomerResponse
 from src.main.api.models.account_response import AccountsListResponse
 from src.main.api.models.deposit_request_fraud import DepositRequestFraud
 from src.main.api.models.deposit_response_fraud import DepositResponseFraud
@@ -74,7 +74,7 @@ class Endpoint(Enum):
     EDIT_CUSTOMER_NAME = EndpointConfig(
         url='/customer/profile',
         request_model=CustomerProfileRequest,
-        response_model=CustomerProfileResponse
+        response_model=CustomerResponse
     )
 
     CUSTOMER_PROFILE = EndpointConfig(

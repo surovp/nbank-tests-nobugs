@@ -11,7 +11,7 @@ from src.main.api.requests.skeleton.requesters.validated_crud_requester import V
 from src.main.api.specs.request_specs import RequestSpecs
 from src.main.api.specs.response_specs import ResponseSpecs
 from src.main.api.steps.base_step import BaseSteps
-from src.main.api.utils.helpers import get_balance_account
+from src.main.api.utils.helpers import get_balance_in_cents, get_summ_in_cents
 
 
 class TransferSteps(BaseSteps):
@@ -36,7 +36,8 @@ class TransferSteps(BaseSteps):
             ResponseSpecs.request_returns_ok()
         ).get(as_list=True)
 
-        assert account_response[0].balance == balance_response[0].balance - transfer_request.amount
+        assert get_summ_in_cents(account_response[0].balance) == get_summ_in_cents(balance_response[0].balance) - \
+                get_summ_in_cents(transfer_request.amount)
         assert transfer_response.message == "Transfer successful"
 
         return transfer_response
@@ -64,12 +65,12 @@ class TransferSteps(BaseSteps):
             ResponseSpecs.request_returns_ok()
         ).get(as_list=True)
 
+        amount_cents = get_summ_in_cents(transfer_request.amount)
+        assert get_balance_in_cents(transfer_balances_response, transfer_request.senderAccountId) == \
+               get_balance_in_cents(balances_response, transfer_request.senderAccountId) - amount_cents
 
-        assert get_balance_account(transfer_balances_response, transfer_request.senderAccountId) == \
-               get_balance_account(balances_response, transfer_request.senderAccountId) - transfer_request.amount
-
-        assert get_balance_account(transfer_balances_response, transfer_request.receiverAccountId) == \
-               get_balance_account(balances_response, transfer_request.receiverAccountId) + transfer_request.amount
+        assert get_balance_in_cents(transfer_balances_response, transfer_request.receiverAccountId) == \
+               get_balance_in_cents(balances_response, transfer_request.receiverAccountId) + amount_cents
 
         return transfer_response
 
@@ -77,7 +78,7 @@ class TransferSteps(BaseSteps):
             self,
             user_request: CreateUserRequest,
             transfer_request: TransferMoneyRequest,
-            error_value: str,
+            error_value: list,
             error_key: None = None,
     ):
         balance_response: List[AccountsListResponse] = ValidatedCrudRequester(

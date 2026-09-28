@@ -6,11 +6,11 @@ from src.main.api.generators.random_model_generator import RandomModelGenerator
 from src.main.api.models.comparison.dao_and_model_assertions import DaoAndModelAssertions
 from src.main.api.models.comparison.model_assertions import ModelAssertions
 from src.main.api.models.create_user_request import CreateUserRequest
-
+from src.main.api.specs.response_specs import CustomerErrors
 
 
 @pytest.mark.api
-@pytest.mark.api_version("with_database")
+@pytest.mark.api_version("with_database_with_fix_with_swagger")
 class TestCreateUser:
     @pytest.mark.check_all_users_change(delta=1, username_source="create_user_request.username", should_exist=True)
     @pytest.mark.parametrize('create_user_request', [RandomModelGenerator.generate(CreateUserRequest)])
@@ -24,12 +24,11 @@ class TestCreateUser:
     @pytest.mark.parametrize(
         argnames='username, password, role, error_key, error_value',
         argvalues=[
-            ('', RandomData.get_password(), 'USER', 'username', 'Username cannot be blank'),
-            ('qw', RandomData.get_password(), 'USER', 'username', 'Username must be between 3 and 15 characters'),
-            ('qwertyuiopqwerty', RandomData.get_password(), 'USER', 'username',
-             'Username must be between 3 and 15 characters'),
-            ('!qgwqg', RandomData.get_password(), 'USER', 'username',
-             'Username must contain only letters, digits, dashes, underscores, and dots'),
+            ('', RandomData.get_password(), 'USER', 'username',
+             [CustomerErrors.REGEX_FORMAT, CustomerErrors.NO_EMPTY, CustomerErrors.LEN_3_TO_15]),
+            ('qw', RandomData.get_password(), 'USER', 'username', CustomerErrors.LEN_3_TO_15),
+            ('qwertyuiopqwerty', RandomData.get_password(), 'USER', 'username', CustomerErrors.LEN_3_TO_15),
+            ('!qgwqg', RandomData.get_password(), 'USER', 'username', CustomerErrors.REGEX_FORMAT),
         ]
     )
     @pytest.mark.check_all_users_change(delta=0, username_source="username", should_exist=False)
