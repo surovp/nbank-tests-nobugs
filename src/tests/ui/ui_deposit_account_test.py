@@ -1,7 +1,6 @@
 import pytest
 from playwright.sync_api import expect, Page
 from src.main.api.classes.api_manager import ApiManager
-from src.main.api.fixtures.api_fixtures import api_manager
 from src.main.api.generators.random_data import RandomData
 from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.api.utils.helpers import get_balance_account

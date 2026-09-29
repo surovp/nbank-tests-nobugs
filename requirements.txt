@@ -8,3 +8,4 @@ pytest-playwright
 pytest-xdist
 psycopg[binary]
 allure-pytest
+flake8

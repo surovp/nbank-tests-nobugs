@@ -1,9 +1,6 @@
-import time
-
 import pytest
 from playwright.sync_api import expect, Page
 from src.main.api.classes.api_manager import ApiManager
-from src.main.api.fixtures.api_fixtures import api_manager
 from src.main.api.generators.random_data import RandomData
 from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.api.utils.helpers import wait_until
@@ -48,4 +45,3 @@ class TestEditProfile:
         user_profile.check_alert_message_and_accept(alert)
 
         assert api_manager.user_steps.get_profile(user_request).name is None
-

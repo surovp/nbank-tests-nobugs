@@ -2,7 +2,6 @@ from http import HTTPStatus
 
 import pytest
 from src.main.api.classes.api_manager import ApiManager
-from src.main.api.fixtures.user_fixtures import user_request
 from src.main.api.generators.random_data import RandomData
 from src.main.api.models.comparison.dao_and_model_assertions import DaoAndModelAssertions
 from src.main.api.models.create_account_response import CreateAccountResponse
@@ -27,7 +26,6 @@ class TestDepositAccount:
 
         dao_balance = api_manager.database_steps.get_account_by_account_number(create.accountNumber)
         DaoAndModelAssertions.assert_that(create, dao_balance).match()
-
 
     @pytest.mark.usefixtures("api_manager", 'user_request')
     @pytest.mark.parametrize(
@@ -85,4 +83,5 @@ class TestDepositAccount:
         )
 
         user_dao = api_manager.database_steps.find_account_by_account_id(acc_id)
-        assert user_dao is None, f"User '{acc_id}' should NOT exist in DB after invalid create, but was found: {user_dao}"
+        assert user_dao is None, \
+            f"User '{acc_id}' should NOT exist in DB after invalid create, but was found: {user_dao}"

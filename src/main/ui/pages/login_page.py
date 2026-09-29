@@ -1,7 +1,8 @@
-from src.main.api.fixtures.user_fixtures import admin_user_request
 from src.main.ui.pages.base_page import BasePage
 
+
 class LoginPage(BasePage):
+
     @property
     def login_button(self):
         return self.page.get_by_role("button", name='Login')

@@ -12,6 +12,7 @@ from src.main.api.specs.fraud_mock import FRAUD_APPROVED_MOCK, TRANSFER_APPROVED
     FRAUD_VERIFICATION_REQUIRED_MOCK, TRANSFER_VERIFICATION_REQUIRED_EXPECTED, FRAUD_MANUAL_REVIEW_MOCK, \
     TRANSFER_MANUAL_REVIEW_EXPECTED
 
+
 @pytest.mark.api
 @pytest.mark.api_version("with_fraud_check")
 @pytest.mark.prepare_users(number=2)
@@ -21,10 +22,10 @@ class TestTransferWithFraudCheck:
         "fraud_mock, expected_data",
         [
             pytest.param(FRAUD_APPROVED_MOCK, TRANSFER_APPROVED_EXPECTED,
-                      marks=pytest.mark.fraud_check_mock(
-                          port=8080,
-                          endpoint=r"/.*",
-                          **FRAUD_APPROVED_MOCK)),
+                         marks=pytest.mark.fraud_check_mock(
+                             port=8080,
+                             endpoint=r"/.*",
+                             **FRAUD_APPROVED_MOCK)),
 
             pytest.param(FRAUD_MANUAL_REVIEW_MOCK, TRANSFER_MANUAL_REVIEW_EXPECTED,
                          marks=pytest.mark.fraud_check_mock(

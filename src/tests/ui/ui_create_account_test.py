@@ -1,7 +1,6 @@
 import pytest
 from playwright.sync_api import Page
 from src.main.api.classes.api_manager import ApiManager
-from src.main.api.fixtures.api_fixtures import api_manager
 from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.ui.pages.bank_alert import BankAlert
 from src.main.ui.pages.user_dashboard import UserDashboard

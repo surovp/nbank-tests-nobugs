@@ -98,6 +98,3 @@ class DataBaseSteps:
             .where(Condition.equal_to("account_id", account_id))
             .extract_optional_as(TransactionsDao)
         )
-
-
-

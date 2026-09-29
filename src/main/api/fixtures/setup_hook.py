@@ -24,8 +24,8 @@ def user_session_extension(request, page, user_factory):
 
 @pytest.fixture()
 def admin_session_autologin(
-    request: pytest.FixtureRequest, 
-    page: Page, 
+    request: pytest.FixtureRequest,
+    page: Page,
     admin_user_request: CreateUserRequest
 ):
     mark = request.node.get_closest_marker("admin_session")

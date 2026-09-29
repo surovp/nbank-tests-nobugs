@@ -11,8 +11,6 @@ class Profile(BasePage):
     def save_changes_button(self):
         return self.page.get_by_role("button", name="💾 Save Changes")
 
-
-
     def url(self):
         return "/edit-profile"
 

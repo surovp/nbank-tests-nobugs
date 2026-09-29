@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List
 
 
 class GetTransactionResponse(BaseModel):
@@ -9,11 +9,13 @@ class GetTransactionResponse(BaseModel):
     timestamp: str
     relatedAccountId: int
 
+
 class GetAccountResponse(BaseModel):
     id: int
     accountNumber: str
     balance: float
     transactions: List[GetTransactionResponse]
+
 
 class GetCustomerProfile(BaseModel):
     id: int

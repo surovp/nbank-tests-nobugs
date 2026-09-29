@@ -2,7 +2,6 @@ import pytest
 from playwright.sync_api import expect, Page
 from src.main.api.classes.api_manager import ApiManager
 from src.main.api.classes.session_storage import SessionStorage
-from src.main.api.fixtures.api_fixtures import api_manager
 from src.main.api.generators.random_data import RandomData
 from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.api.models.customer_profile_request import CustomerProfileRequest
@@ -20,7 +19,10 @@ class TestTransferMoney:
         acc1 = api_manager.user_steps.create_account(user_request)
         acc2 = api_manager.user_steps.create_account(user_request)
         amount = RandomData.get_deposit_amount()
-        api_manager.deposit_steps.deposit(user_request, DepositMoneyRequest(accountId=acc1.id, amount=max_deposit_value()))
+        api_manager.deposit_steps.deposit(
+            user_request,
+            DepositMoneyRequest(accountId=acc1.id, amount=max_deposit_value())
+        )
 
         transfer_money = TransferMoney(page).open()
         expect(transfer_money.transfer_text).to_be_visible()
@@ -47,7 +49,10 @@ class TestTransferMoney:
         user_account_2 = api_manager.user_steps.create_account(user_2)
 
         amount = RandomData.get_deposit_amount()
-        api_manager.deposit_steps.deposit(user_1, DepositMoneyRequest(accountId=user_account_1.id, amount=max_deposit_value()))
+        api_manager.deposit_steps.deposit(
+            user_1,
+            DepositMoneyRequest(accountId=user_account_1.id, amount=max_deposit_value())
+        )
 
         transfer_money = TransferMoney(page).open()
         expect(transfer_money.transfer_text).to_be_visible()
@@ -72,9 +77,15 @@ class TestTransferMoney:
         user_2: CreateUserRequest = SessionStorage.get_user(1)
         user_account_1 = api_manager.user_steps.create_account(user_1)
         user_account_2 = api_manager.user_steps.create_account(user_2)
-        api_manager.customer_steps.update_customer_name(user_2, CustomerProfileRequest(name=RandomData.get_profile_username()))
+        api_manager.customer_steps.update_customer_name(
+            user_2,
+            CustomerProfileRequest(name=RandomData.get_profile_username())
+        )
 
-        api_manager.deposit_steps.deposit(user_1, DepositMoneyRequest(accountId=user_account_1.id, amount=max_deposit_value()))
+        api_manager.deposit_steps.deposit(
+            user_1,
+            DepositMoneyRequest(accountId=user_account_1.id, amount=max_deposit_value())
+        )
         transfer_money = TransferMoney(page).open()
         expect(transfer_money.transfer_text).to_be_visible()
         transfer_money.transfer_money(
@@ -100,14 +111,17 @@ class TestTransferMoney:
         acc1 = api_manager.user_steps.create_account(user_request)
         acc2 = api_manager.user_steps.create_account(user_request)
         amount = RandomData.get_deposit_amount()
-        api_manager.deposit_steps.deposit(user_request, DepositMoneyRequest(accountId=acc1.id, amount=max_deposit_value()))
+        api_manager.deposit_steps.deposit(
+            user_request,
+            DepositMoneyRequest(accountId=acc1.id, amount=max_deposit_value())
+        )
 
         transfer_money = TransferMoney(page).open()
         expect(transfer_money.transfer_text).to_be_visible()
         transfer_money.transfer_money(
             account=acc1.id,
             recipient_account=acc2.accountNumber,
-            amount=max_deposit_value()+amount,
+            amount=max_deposit_value() + amount,
             confirm=True
         )
         transfer_money.check_alert_message_and_accept(BankAlert.INVALID_AMOUNT_OR_ACCOUNT)
@@ -119,7 +133,10 @@ class TestTransferMoney:
     def test_transfer_page_invalid_account(self, page: Page, user_request: CreateUserRequest, api_manager: ApiManager):
         acc1 = api_manager.user_steps.create_account(user_request)
         amount = RandomData.get_deposit_amount()
-        api_manager.deposit_steps.deposit(user_request, DepositMoneyRequest(accountId=acc1.id, amount=max_deposit_value()))
+        api_manager.deposit_steps.deposit(
+            user_request,
+            DepositMoneyRequest(accountId=acc1.id, amount=max_deposit_value())
+        )
 
         transfer_money = TransferMoney(page).open()
         expect(transfer_money.transfer_text).to_be_visible()
@@ -130,4 +147,3 @@ class TestTransferMoney:
             confirm=True
         )
         transfer_money.check_alert_message_and_accept(BankAlert.NO_USER_FOUND_WITH_THIS_ACCOUNT_NUMBER)
-

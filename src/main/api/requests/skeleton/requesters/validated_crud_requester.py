@@ -8,6 +8,7 @@ from src.main.api.requests.skeleton.requesters.crud_requester import CrudRequest
 
 T = TypeVar('T', bound=BaseModel)
 
+
 class ValidatedCrudRequester(HttpRequest):
     def __init__(self, request_spec, endpoint, response_spec):
         super().__init__(request_spec, endpoint, response_spec)
@@ -33,5 +34,8 @@ class ValidatedCrudRequester(HttpRequest):
         response = self.crud_requester.put(model)
         return self._adapter.validate_python(response.json())
 
-    def update(self, id: int): ...
-    def delete(self, id: int): ...
+    def update(self, id: int):
+        ...
+
+    def delete(self, id: int):
+        ...

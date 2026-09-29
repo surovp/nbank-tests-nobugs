@@ -10,7 +10,7 @@ from src.main.api.models.create_user_response import CreateUserResponse
 from src.main.api.models.customer_profile_request import CustomerProfileRequest
 from src.main.api.models.deposit_money_request import DepositMoneyRequest
 from src.main.api.models.deposit_money_response import DepositMoneyResponse
-from src.main.api.models.customer_profile_response import CustomerProfileResponse, CustomerResponse
+from src.main.api.models.customer_profile_response import CustomerResponse
 from src.main.api.models.account_response import AccountsListResponse
 from src.main.api.models.deposit_request_fraud import DepositRequestFraud
 from src.main.api.models.deposit_response_fraud import DepositResponseFraud
@@ -25,12 +25,13 @@ from src.main.api.models.transfer_money_response_fraud import TransferResponseFr
 @dataclass(frozen=True)
 class EndpointConfig:
     url: str
-    request_model:BaseModel
-    response_model:BaseModel
+    request_model: BaseModel
+    response_model: BaseModel
+
 
 class Endpoint(Enum):
     ADMIN_CREATE_USER = EndpointConfig(
-        url = '/admin/users',
+        url='/admin/users',
         request_model=CreateUserRequest,
         response_model=CreateUserResponse
     )

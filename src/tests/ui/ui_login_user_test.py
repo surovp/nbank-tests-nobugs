@@ -1,11 +1,11 @@
 import pytest
-from playwright.sync_api import expect, Page
+from playwright.sync_api import Page
 
-from src.main.api.fixtures.setup_hook import user_session_extension
 from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.ui.pages.admin_panel import AdminPanel
 from src.main.ui.pages.login_page import LoginPage
 from src.main.ui.pages.user_dashboard import UserDashboard
+
 
 @pytest.mark.ui
 @pytest.mark.usefixtures("browser_match_guard", "user_session_extension")

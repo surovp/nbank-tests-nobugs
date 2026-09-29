@@ -51,7 +51,6 @@ class DepositSteps(BaseSteps):
 
             assert deposit_response.transactions
 
-
     def invalid_deposit(
             self,
             user_request: CreateUserRequest,

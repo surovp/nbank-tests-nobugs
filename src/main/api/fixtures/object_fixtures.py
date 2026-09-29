@@ -30,5 +30,5 @@ def cleanup_objects(objects: List[Any]):
                     logging.warning(f'Skip cleanup for user "{getattr(obj, "username", obj)}": {e}')
                     continue
                 api_manager.admin_steps.delete_user(profile.id)
-        except:
+        except Exception:
             logging.warning(f"Object {type(obj)} has not been deleted")

@@ -9,6 +9,7 @@ class TransactionResponse(BaseModel):
     timestamp: str
     relatedAccountId: int
 
+
 class DepositMoneyResponse(BaseModel):
     id: int
     accountNumber: str

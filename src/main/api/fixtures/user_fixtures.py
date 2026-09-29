@@ -6,6 +6,7 @@ from src.main.api.configs.config import Config
 from src.main.api.generators.random_model_generator import RandomModelGenerator
 from src.main.api.models.create_user_request import CreateUserRequest
 
+
 @pytest.fixture(scope='function')
 def user_request(user_factory):
     try:
@@ -25,11 +26,13 @@ def user_factory(api_manager: ApiManager):
 
     yield create_user
 
+
 @pytest.fixture
 def admin_user_request():
     return CreateUserRequest(
         username=Config.get('ADMIN_USERNAME'), password=Config.get('ADMIN_PASSWORD'), role=Config.get('ADMIN_ROLE')
     )
+
 
 @pytest.fixture
 def user_with_account(api_manager: ApiManager):

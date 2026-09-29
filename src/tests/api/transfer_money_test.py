@@ -102,8 +102,8 @@ class TestTransferMoney:
         )
 
         dao_transaction = api_manager.database_steps.find_transaction_by_account_id(second_account.id)
-        assert dao_transaction is None, f"User '{account.id}' should NOT exist in DB after invalid create, but was found: {dao_transaction}"
-
+        assert dao_transaction is None, \
+            f"User '{account.id}' should NOT exist in DB after invalid create, but was found: {dao_transaction}"
 
     @pytest.mark.usefixtures("api_manager", 'user_request', 'user_with_account')
     @pytest.mark.parametrize(
@@ -133,7 +133,9 @@ class TestTransferMoney:
         )
 
         dao_transaction = api_manager.database_steps.find_transaction_by_account_id(user_with_account.id)
-        assert dao_transaction is None, f"User '{user_with_account.id}' should NOT exist in DB after invalid create, but was found: {dao_transaction}"
+        assert dao_transaction is None, \
+            f"User '{user_with_account.id}' should NOT exist in DB after invalid create, " \
+            f"but was found: {dao_transaction}"
 
     @pytest.mark.usefixtures("api_manager", 'user_request')
     def test_transfer_empty_balance_self(
@@ -145,13 +147,17 @@ class TestTransferMoney:
         second_account = api_manager.user_steps.create_account(user_request)
         api_manager.transfer_steps.invalid_transfer(
             user_request,
-            TransferMoneyRequest(senderAccountId=account.id, receiverAccountId=second_account.id, amount=RandomData.get_deposit_amount()),
+            TransferMoneyRequest(
+                senderAccountId=account.id,
+                receiverAccountId=second_account.id,
+                amount=RandomData.get_deposit_amount()
+            ),
             TransferErrors.INVALID_TRANSFER.value
         )
 
         dao_transaction = api_manager.database_steps.find_transaction_by_account_id(second_account.id)
-        assert dao_transaction is None, f"User '{second_account.id}' should NOT exist in DB after invalid create, but was found: {dao_transaction}"
-
+        assert dao_transaction is None, \
+            f"User '{second_account.id}' should NOT exist in DB after invalid create, but was found: {dao_transaction}"
 
     @pytest.mark.usefixtures("api_manager", 'user_request', 'user_with_account')
     def test_transfer_empty_balance_another_account(
@@ -163,12 +169,18 @@ class TestTransferMoney:
         account = api_manager.user_steps.create_account(user_request)
         api_manager.transfer_steps.invalid_transfer(
             user_request,
-            TransferMoneyRequest(senderAccountId=account.id, receiverAccountId=user_with_account.id, amount=RandomData.get_deposit_amount()),
+            TransferMoneyRequest(
+                senderAccountId=account.id,
+                receiverAccountId=user_with_account.id,
+                amount=RandomData.get_deposit_amount()
+            ),
             TransferErrors.INVALID_TRANSFER.value
         )
 
         dao_transaction = api_manager.database_steps.find_transaction_by_account_id(user_with_account.id)
-        assert dao_transaction is None, f"User '{user_with_account.id}' should NOT exist in DB after invalid create, but was found: {dao_transaction}"
+        assert dao_transaction is None, \
+            f"User '{user_with_account.id}' should NOT exist in DB after invalid create, " \
+            f"but was found: {dao_transaction}"
 
     @pytest.mark.usefixtures("api_manager", 'user_request')
     def test_transfer_invalid_account(
@@ -185,10 +197,12 @@ class TestTransferMoney:
             TransferMoneyRequest(
                 senderAccountId=account.id,
                 receiverAccountId=receiver_invalid_acc,
-                amount=balance//2
+                amount=balance // 2
             ),
             TransferErrors.INVALID_TRANSFER.value
         )
 
         dao_transaction = api_manager.database_steps.find_transaction_by_account_id(receiver_invalid_acc)
-        assert dao_transaction is None, f"User '{receiver_invalid_acc}' should NOT exist in DB after invalid create, but was found: {dao_transaction}"
+        assert dao_transaction is None, \
+            f"User '{receiver_invalid_acc}' should NOT exist in DB after invalid create, " \
+            f"but was found: {dao_transaction}"

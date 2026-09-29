@@ -4,7 +4,6 @@ from src.main.api.classes.api_manager import ApiManager
 from src.main.api.generators.random_data import RandomData
 from src.main.api.generators.random_model_generator import RandomModelGenerator
 from src.main.api.models.comparison.dao_and_model_assertions import DaoAndModelAssertions
-from src.main.api.models.comparison.model_assertions import ModelAssertions
 from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.api.specs.response_specs import CustomerErrors
 
@@ -45,4 +44,5 @@ class TestCreateUser:
         api_manager.admin_steps.create_invalid_user(create_user_request, error_key, error_value)
 
         user_dao = api_manager.database_steps.find_user_by_username(username)
-        assert user_dao is None, f"User '{username}' should NOT exist in DB after invalid create, but was found: {user_dao}"
+        assert user_dao is None, \
+            f"User '{username}' should NOT exist in DB after invalid create, but was found: {user_dao}"

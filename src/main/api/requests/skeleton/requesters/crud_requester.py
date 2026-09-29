@@ -9,6 +9,7 @@ from src.main.api.requests.skeleton.http_request import HttpRequest
 
 T = TypeVar('T', bound=BaseModel)
 
+
 class CrudRequester(HttpRequest):
     @property
     def base_url(self) -> str:
@@ -42,7 +43,8 @@ class CrudRequester(HttpRequest):
         self.response_spec(response)
         return response
 
-    def update(self, model: BaseModel, id: int): ...
+    def update(self, model: BaseModel, id: int):
+        ...
 
     def delete(self, id: int) -> requests.Response:
         response = requests.delete(

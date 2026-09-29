@@ -52,4 +52,5 @@ class TestCustomerProfile:
         )
 
         user_dao = api_manager.database_steps.find_name_by_customer_name(name)
-        assert user_dao is None, f"User '{name}' should NOT exist in DB after invalid create, but was found: {user_dao}"
+        assert user_dao is None, \
+            f"User '{name}' should NOT exist in DB after invalid create, but was found: {user_dao}"
