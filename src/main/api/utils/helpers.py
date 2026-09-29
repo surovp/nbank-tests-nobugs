@@ -32,4 +32,4 @@ def wait_until(condition, timeout: int = 5, interval: float = 0.5):
 
 
 def test_util():
-    print('Тестирование нового ямл файла')
+    print('Тестирование нового ямл файла ч2')
