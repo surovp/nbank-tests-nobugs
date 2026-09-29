@@ -23,6 +23,8 @@ services:
     container_name: nbank-app
     ports:
       - "4111:4111"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/nbank
       SPRING_DATASOURCE_USERNAME: postgres
@@ -42,9 +44,9 @@ services:
       - nbank-network
 
   frontend:
-    image: nobugsme/nbank-ui:preprod_version
+    image: ${NBANK_FRONTEND_IMAGE:-nobugsme/nbank-ui:preprod_version}
     ports:
-      - "3000:3000"
+      - "3000:80"
     depends_on:
       - backend
     networks:

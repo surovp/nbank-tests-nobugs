@@ -4,13 +4,10 @@ set -euo pipefail
 # ---------- Настройки ----------
 COMPOSE_FILE="infra/docker-compose/docker-compose.yaml"
 TEST_IMAGE="python-tests:with-stab-tests"
-
-# Имя compose-сети
 NETWORK_NAME="docker-compose_nbank-network"
 
-# Адреса сервисов внутри compose-сети (по именам сервисов)
-BACKEND_URL="http://backend:4111/api/v1"
-UI_BASE_URL="http://frontend:80"
+ENV_FILE=".env.ci"           # окружение для тест-контейнера
+ENV_VERSIONS=".env.versions" # версии backend/frontend для compose
 
 API_MARKER="api"
 UI_MARKER="ui"
@@ -22,22 +19,33 @@ if [[ ! -f "${COMPOSE_FILE}" ]]; then
   exit 1
 fi
 
+if [[ ! -f "${ENV_FILE}" ]]; then
+  echo "❌ Не найден файл окружения: ${ENV_FILE}"
+  exit 1
+fi
+
+if [[ ! -f "${ENV_VERSIONS}" ]]; then
+  echo "❌ Не найден файл версий: ${ENV_VERSIONS}"
+  exit 1
+fi
+
 if ! docker image inspect "${TEST_IMAGE}" >/dev/null 2>&1; then
   echo "❌ Локальный образ '${TEST_IMAGE}' не найден."
   exit 1
 fi
 
+# ---------- Гарантированная остановка окружения ----------
 cleanup() {
   echo ""
   echo "🧹 Останавливаем тестовое окружение..."
-  docker compose -f "${COMPOSE_FILE}" down -v >/dev/null 2>&1 || true
+  docker compose --env-file "${ENV_VERSIONS}" -f "${COMPOSE_FILE}" down -v >/dev/null 2>&1 || true
   echo "✅ Окружение остановлено."
 }
 trap cleanup EXIT
 
 # ---------- 1. Поднимаем окружение ----------
 echo "🚀 Поднимаем тестовое окружение..."
-docker compose -f "${COMPOSE_FILE}" up -d
+docker compose --env-file "${ENV_VERSIONS}" -f "${COMPOSE_FILE}" up -d
 
 # ---------- 2. Ждём готовности backend ----------
 echo "⏳ Ждём готовности backend..."
@@ -62,11 +70,9 @@ docker run --rm \
   --name fraud-mock \
   --network "${NETWORK_NAME}" \
   -p 8080:8080 \
-  -e BACKEND_URL="${BACKEND_URL}" \
-  -e UI_BASE_URL="${UI_BASE_URL}" \
-  -e PLAYWRIGHT_TEST_BASE_URL="${UI_BASE_URL}" \
+  --env-file "${ENV_FILE}" \
   "${TEST_IMAGE}" \
-  pytest -m api --api-version "${API_VERSION}"
+  pytest -m "${API_MARKER}" --api-version "${API_VERSION}"
 
 # ---------- 4. Запускаем UI-тесты ----------
 echo ""
@@ -76,11 +82,9 @@ echo "=============================================="
 docker run --rm \
   --network "${NETWORK_NAME}" \
   -p 8080:8080 \
-  -e BACKEND_URL="${BACKEND_URL}" \
-  -e UI_BASE_URL="${UI_BASE_URL}" \
-  -e PLAYWRIGHT_TEST_BASE_URL="${UI_BASE_URL}" \
+  --env-file "${ENV_FILE}" \
   "${TEST_IMAGE}" \
-  pytest -m ui
+  pytest -m "${UI_MARKER}"
 
 echo ""
 echo "✅ Все тесты завершены успешно!"

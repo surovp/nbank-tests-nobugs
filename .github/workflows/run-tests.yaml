@@ -58,7 +58,6 @@ jobs:
       - name: Run flake8 on src/
         run: flake8 src/
 
-
   # test — поднимает compose, собирает образ, запускает тесты в контейнере
   test:
     needs: [lint]
@@ -90,11 +89,17 @@ jobs:
         env:
           BACKEND_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.backend_tag || 'with_database_with_fix_with_swagger' }}
         run: |
+          # Переопределяем версию backend из inputs (или дефолт) — приоритет над .env.versions
           export NBANK_BACKEND_IMAGE="nobugsme/nbank:${BACKEND_TAG}"
-          docker compose -f infra/docker-compose/docker-compose.yaml up -d
+
+          docker compose \
+            --env-file .env.versions \
+            -f infra/docker-compose/docker-compose.yaml \
+            up -d
+
           for i in {1..60}; do
             if curl -sf http://localhost:4111/actuator/health >/dev/null; then
-              echo "Backend is UP"
+              echo "✅ Backend is UP"
               break
             fi
             sleep 2
@@ -162,7 +167,11 @@ jobs:
 
       - name: Shutdown
         if: always()
-        run: docker compose -f infra/docker-compose/docker-compose.yaml down -v
+        run: |
+          docker compose \
+            --env-file .env.versions \
+            -f infra/docker-compose/docker-compose.yaml \
+            down -v
 
   # push — собирает образ с тегом = short SHA и пушит в Docker Hub, запускается только при push, только после успешных тестов
   push:
