@@ -24,18 +24,46 @@ on:
         required: false
         default: ""
       backend_tag:
-        description: "Docker image tag for backend (e.g. with_database_with_fix, with_fraud_check)"
+        description: "Docker image tag for backend"
         required: true
         type: string
-        default: ""
+        default: "with_database_with_fix_with_swagger"
   push:
     branches: [main, master, nbank-ci-cd]
+    paths:
+      - 'src/**'
+
+env:
+  TEST_IMAGE: python-tests:with-stab-tests
+  DOCKERHUB_REPO: pavels174/pavels-rep
+  NETWORK_NAME: docker-compose_nbank-network
 
 jobs:
-  run:
+  # lint — блокирующий шаг, если CodeStyle не пройден, дальше не идем
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install flake8
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8
+
+      - name: Run flake8 on src/
+        run: flake8 src/
+
+
+  # test — поднимает compose, собирает образ, запускает тесты в контейнере
+  test:
+    needs: [lint]
     runs-on: ubuntu-latest
     timeout-minutes: 30
-
     steps:
       - uses: actions/checkout@v4
 
@@ -46,9 +74,7 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: ~/.cache/pip
-          key: ${{runner.os}}-pip-${{ hashFiles('requirements.txt') }}
-          # если requirements.txt поменялся то ключ новый, кеш не используется
-          # если requirements.txt не поменялся то ключ старый новый, кеш используется
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
 
@@ -56,7 +82,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          playwright install --with-deps
+
+      - name: Build test image
+        run: docker build -t ${{ env.TEST_IMAGE }} .
 
       - name: Start services
         env:
@@ -69,40 +97,82 @@ jobs:
               echo "Backend is UP"
               break
             fi
-          sleep 2
-          done 
+            sleep 2
+          done
           curl -sf http://localhost:4111/actuator/health
-      
-      - name: Run pytest
+
+      - name: Run tests in container
         env:
-          UI_BASE_URL: http://localhost:3000
-          DB_HOST: localhost
-          # при push inputs нет — подставляем значения по умолчанию
           API_VERSION_INPUT: ${{ github.event_name == 'workflow_dispatch' && inputs.api_version || 'with_database_with_fix_with_swagger' }}
-          SUITE_INPUT: ${{ github.event_name == 'workflow_dispatch' && inputs.suite || 'api' }}
+          SUITE_INPUT: ${{ github.event_name == 'workflow_dispatch' && inputs.suite || 'api+ui' }}
           MARKERS_INPUT: ${{ github.event_name == 'workflow_dispatch' && inputs.markers || '' }}
         run: |
           set -eux
-          
+
           API_VERSION_INPUT="${API_VERSION_INPUT:-with_database_with_fix_with_swagger}"
-          SUITE_INPUT="${SUITE_INPUT:-api}"
+          SUITE_INPUT="${SUITE_INPUT:-api+ui}"
           MARKERS="${MARKERS_INPUT:-}"
-          
+
           M_OPT=""
-          
           if [ -n "$MARKERS" ]; then
             M_OPT="-m $MARKERS"
           fi
-          
-          if [ "$SUITE_INPUT" = "api" ]; then
-            pytest -m api --api-version "$API_VERSION_INPUT" $M_OPT -q
-          elif [ "$SUITE_INPUT" = "ui" ]; then
-            pytest -m ui $M_OPT -q
-          else
-            pytest -m api --api-version "$API_VERSION_INPUT" $M_OPT -q
-            pytest -m ui $M_OPT -q
+
+          if [ "$SUITE_INPUT" = "api" ] || [ "$SUITE_INPUT" = "api+ui" ]; then
+            docker run --rm \
+              --name fraud-mock \
+              --network ${{ env.NETWORK_NAME }} \
+              -p 8080:8080 \
+              -e BACKEND_URL=http://backend:4111/api/v1 \
+              -e UI_BASE_URL=http://frontend:80 \
+              -e PLAYWRIGHT_TEST_BASE_URL=http://frontend:80 \
+              ${{ env.TEST_IMAGE }} \
+              pytest -m api --api-version "$API_VERSION_INPUT" $M_OPT -q
+          fi
+
+          if [ "$SUITE_INPUT" = "ui" ] || [ "$SUITE_INPUT" = "api+ui" ]; then
+            docker run --rm \
+              --network ${{ env.NETWORK_NAME }} \
+              -p 8080:8080 \
+              -e BACKEND_URL=http://backend:4111/api/v1 \
+              -e UI_BASE_URL=http://frontend:80 \
+              -e PLAYWRIGHT_TEST_BASE_URL=http://frontend:80 \
+              ${{ env.TEST_IMAGE }} \
+              pytest -m ui $M_OPT -q
           fi
 
       - name: Shutdown
         if: always()
-        run: docker compose -f infra/docker-compose/docker-compose.yaml down
+        run: docker compose -f infra/docker-compose/docker-compose.yaml down -v
+
+
+  # push — собирает образ с тегом = short SHA и пушит в Docker Hub, запускается только при push, только после успешных тестов
+  push:
+    needs: [test]
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set short SHA
+        id: vars
+        run: echo "short_sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Build test image with commit-hash tag
+        run: docker build -t ${{ env.DOCKERHUB_REPO }}:${{ steps.vars.outputs.short_sha }} .
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}   # ← Repository secrets in GitHub
+          password: ${{ secrets.DOCKERHUB_TOKEN }}      # ← Repository secrets in GitHub
+
+      - name: Push to Docker Hub
+        run: docker push ${{ env.DOCKERHUB_REPO }}:${{ steps.vars.outputs.short_sha }}
+
+      - name: Summary
+        run: |
+          echo "### Образ опубликован" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "\`docker pull ${{ env.DOCKERHUB_REPO }}:${{ steps.vars.outputs.short_sha }}\`" >> $GITHUB_STEP_SUMMARY
