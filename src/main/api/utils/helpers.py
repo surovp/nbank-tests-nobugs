@@ -29,3 +29,6 @@ def wait_until(condition, timeout: int = 5, interval: float = 0.5):
             return True
         time.sleep(interval)
     return False
+
+def test_util():
+    print('Тестирование нового ямл файла')
