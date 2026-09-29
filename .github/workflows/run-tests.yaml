@@ -118,33 +118,51 @@ jobs:
             M_OPT="-m $MARKERS"
           fi
 
-          if [ "$SUITE_INPUT" = "api" ] || [ "$SUITE_INPUT" = "api+ui" ]; then
+          if [ "$SUITE_INPUT" = "api" ]; then
+            echo "▶️  Запускаем API-тесты"
             docker run --rm \
               --name fraud-mock \
               --network ${{ env.NETWORK_NAME }} \
               -p 8080:8080 \
-              -e BACKEND_URL=http://backend:4111/api/v1 \
-              -e UI_BASE_URL=http://frontend:80 \
-              -e PLAYWRIGHT_TEST_BASE_URL=http://frontend:80 \
+              --env-file .env.ci \
               ${{ env.TEST_IMAGE }} \
               pytest -m api --api-version "$API_VERSION_INPUT" $M_OPT -q
-          fi
 
-          if [ "$SUITE_INPUT" = "ui" ] || [ "$SUITE_INPUT" = "api+ui" ]; then
+          elif [ "$SUITE_INPUT" = "ui" ]; then
+            echo "▶️  Запускаем UI-тесты"
             docker run --rm \
               --network ${{ env.NETWORK_NAME }} \
               -p 8080:8080 \
-              -e BACKEND_URL=http://backend:4111/api/v1 \
-              -e UI_BASE_URL=http://frontend:80 \
-              -e PLAYWRIGHT_TEST_BASE_URL=http://frontend:80 \
+              --env-file .env.ci \
               ${{ env.TEST_IMAGE }} \
               pytest -m ui $M_OPT -q
+
+          elif [ "$SUITE_INPUT" = "api+ui" ]; then
+            echo "▶️  Запускаем API-тесты, затем UI-тесты"
+            docker run --rm \
+              --name fraud-mock \
+              --network ${{ env.NETWORK_NAME }} \
+              -p 8080:8080 \
+              --env-file .env.ci \
+              ${{ env.TEST_IMAGE }} \
+              pytest -m api --api-version "$API_VERSION_INPUT" $M_OPT -q
+
+            docker run --rm \
+              --network ${{ env.NETWORK_NAME }} \
+              -p 8080:8080 \
+              --env-file .env.ci \
+              ${{ env.TEST_IMAGE }} \
+              pytest -m ui $M_OPT -q
+
+          else
+            echo "❌ Неизвестный suite: '$SUITE_INPUT'"
+            echo "   Ожидается одно из: api | ui | api+ui"
+            exit 1
           fi
 
       - name: Shutdown
         if: always()
         run: docker compose -f infra/docker-compose/docker-compose.yaml down -v
-
 
   # push — собирает образ с тегом = short SHA и пушит в Docker Hub, запускается только при push, только после успешных тестов
   push:
