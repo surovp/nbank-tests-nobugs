@@ -165,6 +165,14 @@ jobs:
           # Поведение artifact upload, если файлов нет.
           if-no-files-found: ignore
 
+      - name: Upload Coverage Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-results-raw
+          path: coverage-results
+          if-no-files-found: ignore
+
       - name: Shutdown services
         if: always()
         run: docker compose -f infra/docker-compose/docker-compose.yaml down
