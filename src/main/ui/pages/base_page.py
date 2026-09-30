@@ -4,6 +4,7 @@ from typing import TypeVar, Type, Callable, List
 
 from playwright.sync_api import Page, Dialog, Locator
 
+from src.main.allure_step_proxy import AllureStepProxy
 from src.main.api.configs.config import Config
 from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.api.specs.request_specs import RequestSpecs
@@ -11,7 +12,7 @@ from src.main.api.specs.request_specs import RequestSpecs
 T = TypeVar('T', bound="BasePage")
 
 
-class BasePage(ABC):
+class BasePage(AllureStepProxy, ABC):
     def __init__(self, page: Page):
         self.page = page
         self.base_url = str(Config.get('UI_BASE_URL', 'http://localhost:3000')).strip('/')

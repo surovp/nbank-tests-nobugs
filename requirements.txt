@@ -9,3 +9,4 @@ pytest-xdist
 psycopg[binary]
 allure-pytest
 flake8
+swagger-coverage-tool
