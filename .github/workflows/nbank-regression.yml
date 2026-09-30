@@ -2,32 +2,38 @@ name: NBank regression
 
 on:
   push:
-    branches: [main, regression-in-pipeline]
+    branches: [ main, regression-in-pipeline ]
     paths:
       - 'src/**'
       - 'requirements.txt'
       - 'infra/docker-compose/**'
       - '.github/workflows/nbank-regression.yml'
 
-    pull_request:
-    workflow_dispatch:
-      inputs:
-        api_version:
-          description: "Backend version tag (matches @pytest.mark.api_version(..))"
-          # Указывает, обязателен ли параметр ручного запуска.
-          required: true # Указывает, обязателен ли параметр ручного запуска.
-          type: choice
-          options:
-            - with_database
-            - with_fraud_check
-            - with_database_with_fix_with_swagger
-          default: with_database_with_fix_with_swagger
-        backend_tag:
-          description: "Docker image tag for backend"
-          required: true
-          type: string
-          # Значение по умолчанию, если пользователь ничего не поменял.
-          default: with_database_with_fix_with_swagger
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'requirements.txt'
+      - 'infra/docker-compose/**'
+      - '.github/workflows/nbank-regression.yml'
+
+  workflow_dispatch:
+    inputs:
+      api_version:
+        description: "Backend version tag (matches @pytest.mark.api_version(..))"
+        # Указывает, обязателен ли параметр ручного запуска.
+        required: true # Указывает, обязателен ли параметр ручного запуска.
+        type: choice
+        options:
+          - with_database
+          - with_fraud_check
+          - with_database_with_fix_with_swagger
+        default: with_database_with_fix_with_swagger
+      backend_tag:
+        description: "Docker image tag for backend"
+        required: true
+        type: string
+        # Значение по умолчанию, если пользователь ничего не поменял.
+        default: with_database_with_fix_with_swagger
 
 env:
   PYTHON_VERSION: "3.13"
