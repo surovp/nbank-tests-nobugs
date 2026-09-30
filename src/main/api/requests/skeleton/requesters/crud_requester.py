@@ -17,7 +17,7 @@ class CrudRequester(HttpRequest):
         return f"{Config.get('server')}{Config.get('api_version')}"
 
     def _coverage_path(self, id: int | None = None) -> str:
-        path = f"{Config.get('api_version')}{self.endpoint.value.url}"
+        path = f"/api{Config.get('api_version')}{self.endpoint.value.url}"
         return f"{path}/{{id}}" if id is not None else path
 
     def post(self, model: Optional[T] = None) -> requests.Response:
