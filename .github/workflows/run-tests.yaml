@@ -38,6 +38,7 @@ env:
   DOCKERHUB_REPO: pavels174/pavels-rep
   NETWORK_NAME: docker-compose_nbank-network
   PYTHON_VERSION: "3.13"
+  SWAGGER_COVERAGE_CONFIG_FILE_YAML: ./.github/swagger_coverage_config.yaml
 
 jobs:
   # lint — блокирующий шаг, если CodeStyle не пройден, дальше не идем

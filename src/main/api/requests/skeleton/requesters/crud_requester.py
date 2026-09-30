@@ -8,7 +8,20 @@ from src.main.api.requests.skeleton.http_request import HttpRequest
 
 
 T = TypeVar('T', bound=BaseModel)
-tracker = SwaggerCoverageTracker(service="nbank-api")
+
+class _NoOpTracker:
+    """Заглушка, когда coverage отключён. Декоратор не меняет функцию. Необходимо для локального запуска тестов"""
+    def track_coverage_requests(self, *_args, **_kwargs):
+        def decorator(func):
+            return func
+        return decorator
+
+try:
+    from swagger_coverage_tool import SwaggerCoverageTracker
+    tracker = SwaggerCoverageTracker(service="nbank-api")
+except Exception as _e:
+    print(f"⚠️  Swagger coverage disabled: {_e}")
+    tracker = _NoOpTracker()
 
 
 class CrudRequester(HttpRequest):
