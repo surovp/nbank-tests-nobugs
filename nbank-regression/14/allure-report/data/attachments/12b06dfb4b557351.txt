@@ -1,0 +1,49 @@
+ERROR    asyncio:base_events.py:1890 Exception in callback SyncBase._sync.<locals>.<lambda>() at /opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/playwright/_impl/_sync_base.py:111
+handle: <Handle SyncBase._sync.<locals>.<lambda>() at /opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/playwright/_impl/_sync_base.py:111>
+Traceback (most recent call last):
+  File "/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/asyncio/events.py", line 89, in _run
+    self._context.run(self._callback, *self._args)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/playwright/_impl/_sync_base.py", line 111, in <lambda>
+    task.add_done_callback(lambda _: g_self.switch())
+                                     ~~~~~~~~~~~~~^^
+  File "/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 548, in _listener_with_error_handler_attached
+    potential_future = listener(params)
+  File "/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/playwright/_impl/_browser_context.py", line 175, in <lambda>
+    "dialog", lambda params: self._on_dialog(from_channel(params["dialog"]))
+                             ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/playwright/_impl/_browser_context.py", line 696, in _on_dialog
+    has_listeners = page.emit(Page.Events.Dialog, dialog) or has_listeners
+                    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/pyee/asyncio.py", line 70, in emit
+    return super().emit(event, *args, **kwargs)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/pyee/base.py", line 220, in emit
+    handled = self._call_handlers(event, args, kwargs)
+  File "/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/pyee/base.py", line 196, in _call_handlers
+    self._emit_run(f, args, kwargs)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/pyee/asyncio.py", line 81, in _emit_run
+    self.emit("error", exc)
+    ~~~~~~~~~^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/pyee/asyncio.py", line 70, in emit
+    return super().emit(event, *args, **kwargs)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/pyee/base.py", line 223, in emit
+    self._emit_handle_potential_error(event, args[0] if args else None)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/pyee/base.py", line 181, in _emit_handle_potential_error
+    raise error
+  File "/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/pyee/asyncio.py", line 79, in _emit_run
+    coro: Any = f(*args, **kwargs)
+                ~^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/pyee/base.py", line 250, in g
+    return f(*args, **kwargs)
+  File "/opt/hostedtoolcache/Python/3.13.15/x64/lib/python3.13/site-packages/playwright/_impl/_impl_to_api_mapping.py", line 139, in wrapper_func
+    return handler(
+        *list(map(lambda a: self.from_maybe_impl(a), args))[:arg_count]
+    )
+  File "/home/runner/work/nbank-tests-nobugs/nbank-tests-nobugs/src/main/ui/pages/base_page.py", line 52, in _handler
+    assert expected_text in d.message, f"Alert text missmatch: {d.message}"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Alert text missmatch: Invalid transfer: insufficient funds or invalid accounts

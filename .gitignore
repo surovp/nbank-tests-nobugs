@@ -1,0 +1,23 @@
+# Игнорирование файлов ОС
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Игнорирование папок редакторов и IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+
+# Игнорирование результатов компиляции и сборок
+build/
+dist/
+out/
+bin/
+*.o
+*.pyc
+
+# --- env ---
+.env
