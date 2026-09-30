@@ -1,6 +1,5 @@
 from typing import TypeVar, Optional
 import requests
-from swagger_coverage_tool import SwaggerCoverageTracker
 
 from src.main.api.configs.config import Config
 from src.main.api.models.base_model import BaseModel
@@ -9,12 +8,14 @@ from src.main.api.requests.skeleton.http_request import HttpRequest
 
 T = TypeVar('T', bound=BaseModel)
 
+
 class _NoOpTracker:
     """Заглушка, когда coverage отключён. Декоратор не меняет функцию. Необходимо для локального запуска тестов"""
     def track_coverage_requests(self, *_args, **_kwargs):
         def decorator(func):
             return func
         return decorator
+
 
 try:
     from swagger_coverage_tool import SwaggerCoverageTracker
