@@ -1,0 +1,17 @@
+# Идентификатор блока или job в YAML.
+services:
+  # Элемент списка для текущего блока YAML.
+  - key: "nbank-api"
+    # Название workflow или step, которое будет видно в GitHub Actions.
+    name: "NBank API"
+    # URL OpenAPI/Swagger схемы, с которой сравниваем покрытие.
+    swagger_url: "http://localhost:4111/v3/api-docs"
+
+# Папка с raw-файлами покрытия, которые пишет tracker во время тестов.
+results_dir: "./coverage-results"
+# Файл истории покрытия между генерациями отчёта.
+history_file: "./coverage-history.json"
+# Куда сохранить HTML-отчёт Swagger Coverage.
+html_report_file: "./swagger-coverage/index.html"
+# Куда сохранить JSON-отчёт Swagger Coverage.
+json_report_file: "./swagger-coverage/coverage-report.json"

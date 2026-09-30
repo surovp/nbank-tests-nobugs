@@ -1,7 +1,9 @@
 from playwright.sync_api import Locator
 
+from src.main.allure_step_proxy import AllureStepProxy
 
-class BaseElement:
+
+class BaseElement(AllureStepProxy):
     def __init__(self, element: Locator):
         self.element: Locator = element
 

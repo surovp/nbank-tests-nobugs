@@ -37,6 +37,7 @@ env:
   TEST_IMAGE: python-tests:with-stab-tests
   DOCKERHUB_REPO: pavels174/pavels-rep
   NETWORK_NAME: docker-compose_nbank-network
+  PYTHON_VERSION: "3.13"
 
 jobs:
   # lint — блокирующий шаг, если CodeStyle не пройден, дальше не идем
@@ -48,7 +49,7 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.13"
+          python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Install flake8
         run: |
@@ -68,7 +69,7 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.13"
+          python-version: ${{ env.PYTHON_VERSION }}
 
       - uses: actions/cache@v4
         with:
