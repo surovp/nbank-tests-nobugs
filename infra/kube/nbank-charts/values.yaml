@@ -1,0 +1,18 @@
+postgres:
+  image: postgres
+  tag: "15"
+  port: 5432
+  database: nbank
+  username: postgres
+  password: postgres
+  storage: 1Gi
+
+backend:
+  image: nobugsme/nbank
+  tag: with_database_with_fix_with_swagger
+  port: 4111
+
+frontend:
+  image: nobugsme/nbank-ui
+  tag: preprod_version
+  port: 80
