@@ -18,13 +18,20 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: {{ .Values.backend.port }}
+          envFrom:
+            - configMapRef:
+                name: backend-config
           env:
-            - name: SPRING_DATASOURCE_URL
-              value: "jdbc:postgresql://postgres:{{ .Values.postgres.port }}/{{ .Values.postgres.database }}"
             - name: SPRING_DATASOURCE_USERNAME
-              value: {{ .Values.postgres.username }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.postgres.secretName }}
+                  key: username
             - name: SPRING_DATASOURCE_PASSWORD
-              value: {{ .Values.postgres.password }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.postgres.secretName }}
+                  key: password
           readinessProbe:
             httpGet:
               path: /actuator/health
