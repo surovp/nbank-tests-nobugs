@@ -1,0 +1,37 @@
+# ============================================================
+# spring-monitoring.yaml
+# ServiceMonitor — ресурс от Prometheus Operator.
+# Говорит Prometheus'у, какие сервисы и по каким путям собирать метрики.
+# ============================================================
+
+# Версия API — CRD от Prometheus Operator (не встроенный K8s API).
+apiVersion: monitoring.coreos.com/v1
+# Тип ресурса — ServiceMonitor. Он описывает, как Prometheus должен мониторить Service.
+kind: ServiceMonitor
+metadata:
+  name: spring-bank-monitor
+  namespace: monitoring
+  labels:
+    # Лейбл release=monitoring. ВАЖНО: должен совпадать с serviceMonitorSelector в monitoring-values.yaml — иначе Prometheus не подхватит этот ServiceMonitor.
+    release: monitoring
+spec:
+  selector:
+    matchLabels:
+      # Prometheus будет собирать метрики с тех Service, у которых лейбл app=backend. Наш backend Service имеет такой лейбл — значит, будет подобран.
+      app: backend
+  namespaceSelector:
+    matchNames:
+      - default
+  endpoints:
+    - port: http
+      # Путь, по которому Spring Boot Actuator отдаёт метрики в формате Prometheus. Стандартный endpoint для Micrometer.
+      path: /actuator/prometheus
+      # Как часто Prometheus будет забирать метрики (каждые 15 секунд).
+      interval: 15s
+      basicAuth:
+        username:
+          name: backend-basic-auth
+          key: username
+        password:
+          name: backend-basic-auth
+          key: password
