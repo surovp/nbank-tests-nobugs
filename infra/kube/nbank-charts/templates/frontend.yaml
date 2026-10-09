@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: "{{ .Values.frontend.image }}:{{ .Values.frontend.tag }}"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: {{ .Values.frontend.port }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+spec:
+  selector:
+    app: frontend
+  ports:
+    - name: http
+      protocol: TCP
+      port: {{ .Values.frontend.port }}
+      targetPort: {{ .Values.frontend.port }}
+  type: NodePort
+
+
+#  ┌─────────────────────────────────────────────┐
+#  │            [Пользователь]                   │
+#  │    Браузер → http://localhost:3000          │
+#  └─────────────────────────────────────────────┘
+#  │
+#  ▼
+#  (kubectl port-forward svc/frontend 3000:80)
+#  │
+#  ▼
+#  ┌─────────────────────────────────────────────┐
+#  │           [Kubernetes Service]              │
+#  │   name: frontend                            │
+#  │   type: NodePort (не используется тут)      │
+#  │   port: 80                                  │
+#  │   targetPort: 80                            │
+#  └─────────────────────────────────────────────┘
+#  │
+#  ▼
+#  ┌─────────────────────────────────────────────┐
+#  │                [Pod]                        │
+#  │   label: app=frontend                       │
+#  │   создан через Deployment                   │
+#  └─────────────────────────────────────────────┘
+#  │
+#  ▼
+#  ┌─────────────────────────────────────────────┐
+#  │         [Контейнер в Pod]                   │
+#  │   image: nobugsme/nbank-ui:with_nginx       │
+#  │   containerPort: 80                         │
+#  └─────────────────────────────────────────────┘

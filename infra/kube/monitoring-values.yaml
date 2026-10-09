@@ -1,0 +1,38 @@
+# ============================================================
+# Управляет настройками Prometheus, Grafana и вспомогательных
+# компонентов (node-exporter, kube-state-metrics).
+# ============================================================
+
+grafana:
+  # Включаем Grafana — веб-интерфейс для визуализации метрик.
+  enabled: true
+  # NodePort — открывает порт на всех нодах кластера, чтобы Grafana была доступна через проброс портов.
+  service:
+    type: NodePort
+  adminUser: admin
+  adminPassword: admin
+  sidecar:
+    dashboards:
+      enabled: true
+    datasources:
+      enabled: true
+
+prometheus:
+  service:
+    type: NodePort
+  prometheusSpec:
+    serviceMonitorSelector:
+      matchLabels:
+        # Prometheus будет собирать метрики только с тех ServiceMonitor,у которых лейбл release=monitoring.
+        # Наш spring-bank-monitor имеет такой лейбл — значит, будет подобран.
+        release: monitoring
+        # Максимальное время старта Prometheus (в секундах).
+    maximumStartupDurationSeconds: 600
+
+prometheus-node-exporter:
+  # Включаем Node Exporter — собирает метрики о самой ноде (CPU, память, диск, сеть). Работает как DaemonSet на каждой ноде.
+  enabled: true
+
+kube-state-metrics:
+  # Включаем kube-state-metrics — собирает метрики о состоянии объектов Kubernetes (Deployments, Pods, Services и т.д.).
+  enabled: true
